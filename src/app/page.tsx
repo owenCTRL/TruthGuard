@@ -742,324 +742,322 @@ export default function TruthGuardASCII() {
         }
       `}</style>
 
-      <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6">
-        <div className="mb-6 border border-green-400 p-4 sm:p-6 rounded-border border-glow-green">
-          <div className="text-center mb-6 overflow-x-auto">
-            <pre className="text-green-400 inline-block text-[10px] xs:text-[9px] sm:text-xs md:text-sm leading-none whitespace-pre-wrap max-w-full break-words">
-{`╔═════════════════════════════════════════════════════════╗
-║                                                         ║
-║    ████████╗   ██╗███╗   ██╗██████╗ ███████╗██╗  ██╗    ║
-║    ╚══██╔══╝   ██║████╗  ██║██╔══██╗██╔════╝╚██╗██╔╝    ║
-║       ██║█████╗██║██╔██╗ ██║██║  ██║█████╗   ╚███╔╝     ║
-║       ██║╚════╝██║██║╚██╗██║██║  ██║██╔══╝   ██╔██╗     ║
-║       ██║      ██║██║ ╚████║██████╔╝███████╗██╔╝ ██╗    ║
-║       ╚═╝      ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ║
-║                                                         ║
-║       GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION       ║
-║                                                         ║
-╚═════════════════════════════════════════════════════════╝
-║   █ T-Index v0.0.1 - Development Build           ║
-║   └─ Monitoring global narratives in real-time   ║
-╚══════════════════════════════════════════════════╝`}
-            </pre>
-          </div>
+      <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6 overflow-hidden">
+        <div className="mx-auto max-w-screen-xl">
+          <div className="mb-6 border border-green-400 p-4 sm:p-6 rounded-border border-glow-green">
+            <div className="text-center mb-6 overflow-x-auto">
+              <pre className="text-green-400 inline-block text-[10px] xs:text-[9px] sm:text-xs md:text-sm leading-none whitespace-pre max-w-full break-words">
+  {`╔═════════════════════════════════════════════════════════╗
+  ║                                                         ║
+  ║    ████████╗   ██╗███╗   ██╗██████╗ ███████╗██╗  ██╗    ║
+  ║    ╚══██╔══╝   ██║████╗  ██║██╔══██╗██╔════╝╚██╗██╔╝    ║
+  ║       ██║█████╗██║██╔██╗ ██║██║  ██║█████╗   ╚███╔╝     ║
+  ║       ██║╚════╝██║██║╚██╗██║██║  ██║██╔══╝   ██╔██╗     ║
+  ║       ██║      ██║██║ ╚████║██████╔╝███████╗██╔╝ ██╗    ║
+  ║       ╚═╝      ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ║
+  ║                                                         ║
+  ║       GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION       ║
+  ║                                                         ║
+  ╚═════════════════════════════════════════════════════════╝
+  ║   █ T-Index v0.0.1 - Development Build           ║
+  ║   └─ Monitoring global narratives in real-time   ║
+  ╚══════════════════════════════════════════════════╝`}
+              </pre>
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <div className="border border-green-400 p-4 h-[500px] sm:h-[500px] md:h-[550px] relative rounded-border border-glow-green"
-                   onMouseEnter={() => setIsMouseOverGlobe(true)}
-                   onMouseLeave={() => setIsMouseOverGlobe(false)}>
-                <div className="absolute top-2 left-2 text-xs text-yellow-400 z-10">
-                  ◉ GLOBAL NETWORK
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-2">
+                <div className="border border-green-400 p-4 h-[500px] sm:h-[500px] md:h-[550px] relative rounded-border border-glow-green"
+                    onMouseEnter={() => setIsMouseOverGlobe(true)}
+                    onMouseLeave={() => setIsMouseOverGlobe(false)}>
+                  <div className="absolute top-2 left-2 text-xs text-yellow-400 z-10">
+                    ◉ GLOBAL NETWORK
+                  </div>
+
+                  <div className="absolute top-2 right-2 text-xs text-green-400 z-10 flex items-center gap-2">
+                    <span>DRAG TO ROTATE</span>
+                    <div className="flex gap-1">
+                      <button onClick={handleZoomOut} className="zoom-button rounded-border">−</button>
+                      <button onClick={handleZoomIn} className="zoom-button rounded-border">+</button>
+                    </div>
+                  </div>
+
+                  <div
+                    className="h-full flex items-center justify-center cursor-move select-none"
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                  >
+                    <pre className="text-green-400 text-[10px] leading-none">{renderGlobe()}</pre>
+                  </div>
+
+                  <div className="absolute bottom-2 left-2 text-xs space-y-1">
+                    <div className="text-yellow-400">◉ LEGEND</div>
+                    <div className="grid grid-cols-3 gap-2 text-[10px] text-green-400">
+                      <div>▓█ Land</div>
+                      <div>~≈ Ocean</div>
+                      <div>▲ Mountains</div>
+                      <div>= Equator</div>
+                      <div>| Prime Meridian</div>
+                      <div>· Grid Lines</div>
+                    </div>
+                    <div className="text-yellow-400 mt-2">◉ ACTIVE REGIONS</div>
+                    <div className="grid grid-cols-2 gap-2 text-[10px] text-green-400">
+                      <div>North America: {stories.filter(s => s.location.lng > -170 && s.location.lng < -50).length}</div>
+                      <div>Europe: {stories.filter(s => s.location.lng > -25 && s.location.lng < 40).length}</div>
+                      <div>Asia: {stories.filter(s => s.location.lng > 40 && s.location.lng < 180).length}</div>
+                      <div>Critical: <span className="text-red-400">{stories.filter(s => s.severity === 'CRITICAL').length}</span></div>
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-2 right-2 text-xs text-green-400">
+                    <div>CONNECTIONS: {stories.reduce((acc, s) => acc + (s.connections?.length || 0), 0)}</div>
+                    <div>ROTATION: {Math.round(globeRotation)}°</div>
+                    <div>ZOOM: {Math.round(globeZoom * 100)}%</div>
+                  </div>
+
+                  {(hoveredStory || selectedStory) && (
+                    <div className="absolute top-12 left-2 bg-black border border-green-400 p-2 rounded-border text-xs max-w-xs">
+                      <div className="text-yellow-400 font-bold mb-1">
+                        {(hoveredStory || selectedStory)?.location?.name ?? ''}
+                      </div>
+                      <div className="text-green-400">
+                        Category: {(hoveredStory || selectedStory)?.category ?? ''}
+                      </div>
+                      <div className="text-green-400">
+                        Sources: {(hoveredStory || selectedStory)?.sources ?? ''}
+                      </div>
+                      <div className="text-green-400">
+                        Truth: {(hoveredStory || selectedStory)?.truthScore ?? ''}%
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <div className="absolute top-2 right-2 text-xs text-green-400 z-10 flex items-center gap-2">
-                  <span>DRAG TO ROTATE</span>
-                  <div className="flex gap-1">
-                    <button onClick={handleZoomOut} className="zoom-button rounded-border">−</button>
-                    <button onClick={handleZoomIn} className="zoom-button rounded-border">+</button>
+                <div className={`border border-green-400 p-4 ${getTerminalHeight()} mt-4 overflow-y-auto rounded-border border-glow-green terminal-font max-h-[400px] md:max-h-[500px]`} ref={terminalRef}>
+                  <div className="text-xs space-y-1 text-green-400">
+                    {terminalOutput.map((line, index) => (
+                      <div key={index} className="font-light">{line}</div>
+                    ))}
+                    {isProcessing && (
+                      <div className="mt-2">
+                        <div>{ModernProgressBar({ value: scanProgress, width: 40 })}</div>
+                      </div>
+                    )}
+                    <span className="blink">█</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="border border-green-400 p-4 h-[250px] sm:h-[300px] md:h-[350px] overflow-y-auto rounded-border border-glow-green">
+                  <div className="text-sm mb-3 text-yellow-400 flex items-center justify-between">
+                    <span>◉ DETECTED NARRATIVES</span>
+                    <span className="text-xs text-green-400 pulse">LIVE</span>
+                  </div>
+                  <div className="space-y-2">
+                    {stories.map((story) => (
+                      <div
+                        key={story.id}
+                        className={`border p-3 cursor-pointer transition-all rounded-border ${
+                          selectedStory?.id === story.id 
+                            ? 'story-card-selected border-yellow-400' 
+                            : 'border-green-400 hover:story-card-hover'
+                        }`}
+                        onClick={() => analyzeStory(story)}
+                        onMouseEnter={() => setHoveredStory(story)}
+                        onMouseLeave={() => setHoveredStory(null)}
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-lg ${
+                              story.category === 'DEFENSE' ? 'text-red-400' :
+                              story.category === 'ECONOMICS' ? 'text-green-400' :
+                              story.category === 'CYBER' ? 'text-purple-400' :
+                              story.category === 'ENERGY' ? 'text-yellow-400' :
+                              'text-white'
+                            }`}>
+                              {getMarkerSymbol(story.category, story.severity)}
+                            </span>
+                            <span className="text-xs font-bold text-green-400">{story.category}</span>
+                          </div>
+                          <span className={`text-xs ${
+                            story.severity === 'CRITICAL' ? 'text-red-400 pulse' : 
+                            story.severity === 'HIGH' ? 'text-yellow-400' :
+                            'text-green-400'
+                          }`}>
+                            {story.severity}
+                          </span>
+                        </div>
+                        <div className="text-xs mb-2 text-gray-300">{story.title}</div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-yellow-400">Reliability:</span>
+                            <div className="text-green-400">
+                              {ModernProgressBar({ value: story.truthScore || 0, width: 10, showPercentage: false })} {story.truthScore ?? 0}%
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-yellow-400">BIAS:</span>
+                            <div className={story.bias > 30 ? 'text-red-400' : 'text-yellow-400'}>
+                              {ModernProgressBar({ value: story.bias, width: 10, showPercentage: false })} {story.bias}%
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-2 text-xs text-gray-400">
+                          {story.sources} sources • {story.location.name}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div
-                  className="h-full flex items-center justify-center cursor-move select-none"
-                  onMouseDown={handleMouseDown}
-                  onMouseMove={handleMouseMove}
-                  onMouseUp={handleMouseUp}
-                  onMouseLeave={handleMouseUp}
-                >
-                  <pre className="text-green-400 text-[10px] leading-none">{renderGlobe()}</pre>
-                </div>
+                {selectedStory && (
+                  <div className="border border-green-400 p-4 rounded-border border-glow-green h-[670px] max-h-[80vh] overflow-y-auto">
+                    <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
 
-                <div className="absolute bottom-2 left-2 text-xs space-y-1">
-                  <div className="text-yellow-400">◉ LEGEND</div>
-                  <div className="grid grid-cols-3 gap-2 text-[10px] text-green-400">
-                    <div>▓█ Land</div>
-                    <div>~≈ Ocean</div>
-                    <div>▲ Mountains</div>
-                    <div>= Equator</div>
-                    <div>| Prime Meridian</div>
-                    <div>· Grid Lines</div>
-                  </div>
-                  <div className="text-yellow-400 mt-2">◉ ACTIVE REGIONS</div>
-                  <div className="grid grid-cols-2 gap-2 text-[10px] text-green-400">
-                    <div>North America: {stories.filter(s => s.location.lng > -170 && s.location.lng < -50).length}</div>
-                    <div>Europe: {stories.filter(s => s.location.lng > -25 && s.location.lng < 40).length}</div>
-                    <div>Asia: {stories.filter(s => s.location.lng > 40 && s.location.lng < 180).length}</div>
-                    <div>Critical: <span className="text-red-400">{stories.filter(s => s.severity === 'CRITICAL').length}</span></div>
-                  </div>
-                </div>
+                    {isProcessing ? (
+                      <div className="text-center py-8">
+                        <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
+                        <div className="text-green-400 text-xs">
+                          <pre>
+  {`    ░░░░░░░░
+    ░████████░
+  ░██████████░
+  ░████████████░
+  ░████████████░
+  ░██████████░
+    ░████████░
+      ░░░░░░░░`}
+                          </pre>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 text-xs">
+                        <div className="grid grid-cols-2 gap-3 p-3 border border-green-400 rounded-border">
+                          <div>
+                            <div className="text-yellow-400 mb-1">Truth Index</div>
+                            <div className={`text-2xl font-bold ${
+                              (selectedStory.truthScore ?? 0) >= 70 ? 'text-green-400' :
+                              (selectedStory.truthScore ?? 0) >= 50 ? 'text-yellow-400' :
+                              'text-red-400'
+                            }`}>
+                              {selectedStory.truthScore ?? 0}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-yellow-400 mb-1">BIAS LEVEL</div>
+                            <div className={`text-2xl font-bold ${
+                              selectedStory.bias <= 20 ? 'text-green-400' :
+                              selectedStory.bias <= 40 ? 'text-yellow-400' :
+                              'text-red-400'
+                            }`}>
+                              {selectedStory.bias}%
+                            </div>
+                          </div>
+                        </div>
 
-                <div className="absolute bottom-2 right-2 text-xs text-green-400">
-                  <div>CONNECTIONS: {stories.reduce((acc, s) => acc + (s.connections?.length || 0), 0)}</div>
-                  <div>ROTATION: {Math.round(globeRotation)}°</div>
-                  <div>ZOOM: {Math.round(globeZoom * 100)}%</div>
-                </div>
+                        <div className="space-y-1">
+                          <div>
+                            <span className="text-yellow-400">LOCATION:</span> 
+                            <span className="text-green-400">{selectedStory.location.name}, {selectedStory.location.country}</span>
+                          </div>
+                          <div>
+                            <span className="text-yellow-400">SOURCES:</span> 
+                            <span className="text-green-400">{selectedStory.sources} aggregated</span>
+                          </div>
+                          <div>
+                            <span className="text-yellow-400">RELIABILITY:</span> 
+                            <span className="text-green-400">{ModernProgressBar({ value: selectedStory.reliability, width: 15 })}</span>
+                          </div>
+                        </div>
 
-                {(hoveredStory || selectedStory) && (
-                  <div className="absolute top-12 left-2 bg-black border border-green-400 p-2 rounded-border text-xs max-w-xs">
-                    <div className="text-yellow-400 font-bold mb-1">
-                      {(hoveredStory || selectedStory)?.location?.name ?? ''}
-                    </div>
-                    <div className="text-green-400">
-                      Category: {(hoveredStory || selectedStory)?.category ?? ''}
-                    </div>
-                    <div className="text-green-400">
-                      Sources: {(hoveredStory || selectedStory)?.sources ?? ''}
-                    </div>
-                    <div className="text-green-400">
-                      Truth: {(hoveredStory || selectedStory)?.truthScore ?? ''}%
-                    </div>
+                        <div className="mt-3 pt-3 border-t border-green-400">
+                          <div className="text-yellow-400 mb-2">◉ ABSTRACTED CONTENT:</div>
+                          <div className="text-gray-300 bg-black p-3 border-l-4 border-pink-400 rounded-border">
+                            {selectedStory.abstractedContent ?? 'N/A'}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-3 mt-3">
+                          <div>
+                            <div className="text-red-400 mb-1">◉ BIASED CLAIMS:</div>
+                            <div className="space-y-1">
+                              {selectedStory.biasedClaims?.map((claim, i) => (
+                                <div key={i} className="text-red-300 pl-2">× {claim}</div>
+                              )) ?? <div className="text-red-300 pl-2">None</div>}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-green-400 mb-1">◉ VERIFIED FACTS:</div>
+                            <div className="space-y-1">
+                              {selectedStory.verifiedFacts?.map((fact, i) => (
+                                <div key={i} className="text-green-300 pl-2">✓ {fact}</div>
+                              )) ?? <div className="text-green-300 pl-2">None</div>}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-3">
+                          <div className="text-yellow-400 mb-1">◉ KEY ENTITIES:</div>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedStory.keyPlayers.map(player => (
+                              <span key={player} className="border border-green-400 px-2 py-1 text-green-400 rounded-border">
+                                {player}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {selectedStory.connections && selectedStory.connections.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-green-400">
+                            <div className="text-yellow-400 mb-1">◉ NARRATIVE CONNECTIONS:</div>
+                            {selectedStory.connections.map(connId => {
+                              const conn = stories.find(s => s.id === connId);
+                              return conn ? (
+                                <div key={connId} className="text-gray-300 pl-2">
+                                  → {conn.title} <span className="text-green-400">({conn.truthScore ?? 0}% truth)</span>
+                                </div>
+                              ) : null;
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
+            </div>
 
-              <div className={`border border-green-400 p-4 ${getTerminalHeight()} mt-4 overflow-y-auto rounded-border border-glow-green terminal-font max-h-[400px] md:max-h-[500px]`} ref={terminalRef}>
-                <div className="text-xs space-y-1 text-green-400">
-                  {terminalOutput.map((line, index) => (
-                    <div key={index} className="font-light">{line}</div>
-                  ))}
-                  {isProcessing && (
-                    <div className="mt-2">
-                      <div>{ModernProgressBar({ value: scanProgress, width: 40 })}</div>
-                    </div>
-                  )}
-                  <span className="blink">█</span>
+            <div className="mt-6 border border-green-400 p-3 rounded-border border-glow-green text-xs sm:text-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
+                <div className="flex flex-wrap gap-4 items-center">
+                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>SYSTEM:</span>  T-INDEX v0.0.1</div>
+                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>MODE:</span>  ACTIVE</div>
+                  <div className="flex items-center gap-1"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>UPTIME:</span> 99.97%</div>
                 </div>
+                <div className="text-green-400 pulse ml-auto">█</div>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="border border-green-400 p-4 h-[250px] sm:h-[300px] md:h-[350px] overflow-y-auto rounded-border border-glow-green">
-                <div className="text-sm mb-3 text-yellow-400 flex items-center justify-between">
-                  <span>◉ DETECTED NARRATIVES</span>
-                  <span className="text-xs text-green-400 pulse">LIVE</span>
-                </div>
-                <div className="space-y-2">
-                  {stories.map((story) => (
-                    <div
-                      key={story.id}
-                      className={`border p-3 cursor-pointer transition-all rounded-border ${
-                        selectedStory?.id === story.id 
-                          ? 'story-card-selected border-yellow-400' 
-                          : 'border-green-400 hover:story-card-hover'
-                      }`}
-                      onClick={() => analyzeStory(story)}
-                      onMouseEnter={() => setHoveredStory(story)}
-                      onMouseLeave={() => setHoveredStory(null)}
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-lg ${
-                            story.category === 'DEFENSE' ? 'text-red-400' :
-                            story.category === 'ECONOMICS' ? 'text-green-400' :
-                            story.category === 'CYBER' ? 'text-purple-400' :
-                            story.category === 'ENERGY' ? 'text-yellow-400' :
-                            'text-white'
-                          }`}>
-                            {getMarkerSymbol(story.category, story.severity)}
-                          </span>
-                          <span className="text-xs font-bold text-green-400">{story.category}</span>
-                        </div>
-                        <span className={`text-xs ${
-                          story.severity === 'CRITICAL' ? 'text-red-400 pulse' : 
-                          story.severity === 'HIGH' ? 'text-yellow-400' :
-                          'text-green-400'
-                        }`}>
-                          {story.severity}
-                        </span>
-                      </div>
-                      <div className="text-xs mb-2 text-gray-300">{story.title}</div>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <span className="text-yellow-400">Reliability:</span>
-                          <div className="text-green-400">
-                            {ModernProgressBar({ value: story.truthScore || 0, width: 10, showPercentage: false })} {story.truthScore ?? 0}%
-                          </div>
-                        </div>
-                        <div>
-                          <span className="text-yellow-400">BIAS:</span>
-                          <div className={story.bias > 30 ? 'text-red-400' : 'text-yellow-400'}>
-                            {ModernProgressBar({ value: story.bias, width: 10, showPercentage: false })} {story.bias}%
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-2 text-xs text-gray-400">
-                        {story.sources} sources • {story.location.name}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
+              <div className="text-center p-3 border border-green-400 rounded-border">
+                <div className="text-yellow-400">SOURCES</div>
+                <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>
               </div>
-
-              {selectedStory && (
-                <div className="border border-green-400 p-4 rounded-border border-glow-green h-[670px] max-h-[80vh] overflow-y-auto">
-                  <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
-
-                  {isProcessing ? (
-                    <div className="text-center py-8">
-                      <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
-                      <div className="text-green-400 text-xs">
-                        <pre>
-{`    ░░░░░░░░
-  ░████████░
- ░██████████░
-░████████████░
-░████████████░
- ░██████████░
-  ░████████░
-    ░░░░░░░░`}
-                        </pre>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-3 text-xs">
-                      <div className="grid grid-cols-2 gap-3 p-3 border border-green-400 rounded-border">
-                        <div>
-                          <div className="text-yellow-400 mb-1">Truth Index</div>
-                          <div className={`text-2xl font-bold ${
-                            (selectedStory.truthScore ?? 0) >= 70 ? 'text-green-400' :
-                            (selectedStory.truthScore ?? 0) >= 50 ? 'text-yellow-400' :
-                            'text-red-400'
-                          }`}>
-                            {selectedStory.truthScore ?? 0}%
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-yellow-400 mb-1">BIAS LEVEL</div>
-                          <div className={`text-2xl font-bold ${
-                            selectedStory.bias <= 20 ? 'text-green-400' :
-                            selectedStory.bias <= 40 ? 'text-yellow-400' :
-                            'text-red-400'
-                          }`}>
-                            {selectedStory.bias}%
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <div>
-                          <span className="text-yellow-400">LOCATION:</span> 
-                          <span className="text-green-400">{selectedStory.location.name}, {selectedStory.location.country}</span>
-                        </div>
-                        <div>
-                          <span className="text-yellow-400">SOURCES:</span> 
-                          <span className="text-green-400">{selectedStory.sources} aggregated</span>
-                        </div>
-                        <div>
-                          <span className="text-yellow-400">RELIABILITY:</span> 
-                          <span className="text-green-400">{ModernProgressBar({ value: selectedStory.reliability, width: 15 })}</span>
-                        </div>
-                      </div>
-
-                      <div className="mt-3 pt-3 border-t border-green-400">
-                        <div className="text-yellow-400 mb-2">◉ ABSTRACTED CONTENT:</div>
-                        <div className="text-gray-300 bg-black p-3 border-l-4 border-pink-400 rounded-border">
-                          {selectedStory.abstractedContent ?? 'N/A'}
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-3 mt-3">
-                        <div>
-                          <div className="text-red-400 mb-1">◉ BIASED CLAIMS:</div>
-                          <div className="space-y-1">
-                            {selectedStory.biasedClaims?.map((claim, i) => (
-                              <div key={i} className="text-red-300 pl-2">× {claim}</div>
-                            )) ?? <div className="text-red-300 pl-2">None</div>}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-green-400 mb-1">◉ VERIFIED FACTS:</div>
-                          <div className="space-y-1">
-                            {selectedStory.verifiedFacts?.map((fact, i) => (
-                              <div key={i} className="text-green-300 pl-2">✓ {fact}</div>
-                            )) ?? <div className="text-green-300 pl-2">None</div>}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="mt-3">
-                        <div className="text-yellow-400 mb-1">◉ KEY ENTITIES:</div>
-                        <div className="flex flex-wrap gap-1">
-                          {selectedStory.keyPlayers.map(player => (
-                            <span key={player} className="border border-green-400 px-2 py-1 text-green-400 rounded-border">
-                              {player}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {selectedStory.connections && selectedStory.connections.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-green-400">
-                          <div className="text-yellow-400 mb-1">◉ NARRATIVE CONNECTIONS:</div>
-                          {selectedStory.connections.map(connId => {
-                            const conn = stories.find(s => s.id === connId);
-                            return conn ? (
-                              <div key={connId} className="text-gray-300 pl-2">
-                                → {conn.title} <span className="text-green-400">({conn.truthScore ?? 0}% truth)</span>
-                              </div>
-                            ) : null;
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-6 border border-green-400 p-3 rounded-border border-glow-green text-xs sm:text-sm">
-            <div className="flex justify-between items-center text-xs">
-              <div className="flex items-center gap-4">
-                <span className="text-green-400">█ SYSTEM: T-INDEX v0.0.1</span>
-                <span className="text-green-400">█ MODE: ACTIVE</span>
+              <div className="text-center p-3 border border-green-400 rounded-border">
+                <div className="text-yellow-400">AVG TRUTH INDEX</div>
+                <div className="text-2xl font-bold text-green-400">{globalStats.avgTruthScore}%</div>
               </div>
-              <div className="flex items-center gap-4 text-green-400">
-                <span>█ UPTIME: 99.97%</span>
-                <span>█ ALGORITHMS: <span className="text-green-400">OPTIMAL</span></span>
-                <span>█ QUEUE: <span className="text-yellow-400">{stories.filter(s => s.bias > 30).length}</span> PRIORITY</span>
+              <div className="text-center p-3 border border-green-400 rounded-border">
+                <div className="text-yellow-400">CRITICAL BIAS</div>
+                <div className="text-2xl font-bold text-red-400">{globalStats.criticalBias}</div>
               </div>
-              <div className="text-green-400 pulse">█</div>
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
-            <div className="text-center p-3 border border-green-400 rounded-border">
-              <div className="text-yellow-400">SOURCES</div>
-              <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>
-            </div>
-            <div className="text-center p-3 border border-green-400 rounded-border">
-              <div className="text-yellow-400">AVG TRUTH INDEX</div>
-              <div className="text-2xl font-bold text-green-400">{globalStats.avgTruthScore}%</div>
-            </div>
-            <div className="text-center p-3 border border-green-400 rounded-border">
-              <div className="text-yellow-400">CRITICAL BIAS</div>
-              <div className="text-2xl font-bold text-red-400">{globalStats.criticalBias}</div>
-            </div>
-            <div className="text-center p-3 border border-green-400 rounded-border">
-              <div className="text-yellow-400">REGIONS</div>
-              <div className="text-2xl font-bold text-green-400">{globalStats.activeRegions}</div>
+              <div className="text-center p-3 border border-green-400 rounded-border">
+                <div className="text-yellow-400">REGIONS</div>
+                <div className="text-2xl font-bold text-green-400">{globalStats.activeRegions}</div>
+              </div>
             </div>
           </div>
         </div>
