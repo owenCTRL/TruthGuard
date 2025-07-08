@@ -745,8 +745,8 @@ export default function TruthGuardASCII() {
       <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6 overflow-hidden">
         <div className="mx-auto max-w-screen-xl">
           <div className="mb-6 border border-green-400 p-4 sm:p-6 rounded-border border-glow-green">
-            <div className="text-center mb-6 overflow-x-hidden max-w-screen">
-              <pre className="text-green-400 block text-[8px] sm:text-[8px] md:text-xs leading-none whitespace-pre break-words">
+            <div className="text-center mb-6 min-h-auto overflow-y-hidden overflow-x-hidden max-w-screen">
+              <pre className="text-green-400 block text-[4px] sm:text-[8px] md:text-xs leading-none whitespace-pre break-words">
   {`
 ████████╗██████╗ ██╗   ██╗████████╗██╗  ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ 
 ╚══██╔══╝██╔══██╗██║   ██║╚══██╔══╝██║  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗
@@ -756,7 +756,7 @@ export default function TruthGuardASCII() {
    ╚═╝   ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
                                                                                      `}
               </pre>
-              <pre className='block text-[12px] sm:text-[16px] md:text-sm leading-none whitespace-pre break-words'>
+              <pre className='block text-[10px] sm:text-sm md:text-[16px] leading-none whitespace-pre break-words'>
                 {`
 GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
 █ v0.0.1 - Development Build`}
@@ -773,7 +773,6 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                   </div>
 
                   <div className="absolute top-2 right-2 text-xs text-green-400 z-10 flex items-center gap-2">
-                    <span>DRAG TO ROTATE</span>
                     <div className="flex gap-1">
                       <button onClick={handleZoomOut} className="zoom-button rounded-border">−</button>
                       <button onClick={handleZoomIn} className="zoom-button rounded-border">+</button>
@@ -790,7 +789,7 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                     <pre className="text-green-400 text-[10px] leading-none">{renderGlobe()}</pre>
                   </div>
 
-                  <div className="absolute bottom-2 left-2 text-xs space-y-1">
+                  <div className="absolute bottom-2 left-2 text-xs space-y-1 invisible md:visible">
                     <div className="text-yellow-400">◉ LEGEND</div>
                     <div className="grid grid-cols-3 gap-2 text-[10px] text-green-400">
                       <div>▓█ Land</div>
