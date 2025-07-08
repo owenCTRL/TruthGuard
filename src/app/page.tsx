@@ -475,7 +475,7 @@ export default function TruthGuardASCII() {
 
     globeRef.current = new ASCIIGlobe(80, 40);
 
-    addTerminalLine('█ DEBUNK SYSTEM INITIALIZED');
+    addTerminalLine('█ DBNKD SYSTEM INITIALIZED');
     addTerminalLine(`├─ Connected to ${stats.activeRegions} regions`);
     addTerminalLine(`├─ Monitoring ${stats.totalSources} sources`);
     addTerminalLine(`├─ Global truth index average: ${stats.avgTruthScore}%`);
@@ -546,7 +546,7 @@ export default function TruthGuardASCII() {
 
   const clearTerminal = () => {
     setTerminalOutput([
-      '█ DEBUNK TERMINAL v0.0.1',
+      '█ DBNKD TERMINAL v0.0.1',
     ]);
   };
 
@@ -748,14 +748,15 @@ export default function TruthGuardASCII() {
             <div className="text-center mb-6 overflow-x-auto">
               <pre className="text-green-400 inline-block text-[10px] xs:text-[9px] sm:text-xs md:text-sm leading-none whitespace-pre max-w-full break-words">
   {`
- ██████╗ ███████╗██████╗ ██╗   ██╗███╗   ██╗██╗  ██╗ 
- ██╔══██╗██╔════╝██╔══██╗██║   ██║████╗  ██║██║ ██╔╝ 
- ██║  ██║█████╗  ██████╔╝██║   ██║██╔██╗ ██║█████╔╝  
- ██║  ██║██╔══╝  ██╔══██╗██║   ██║██║╚██╗██║██╔═██╗  
- ██████╔╝███████╗██████╔╝╚██████╔╝██║ ╚████║██║  ██╗ 
- ╚═════╝ ╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝ 
-                                                     
-     GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION     
+     ██████╗ ██████╗ ███╗   ██╗██╗  ██╗██████╗      
+     ██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝██╔══██╗     
+     ██║  ██║██████╔╝██╔██╗ ██║█████╔╝ ██║  ██║     
+     ██║  ██║██╔══██╗██║╚██╗██║██╔═██╗ ██║  ██║     
+     ██████╔╝██████╔╝██║ ╚████║██║  ██╗██████╔╝     
+     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═════╝      
+                                                    
+                                                    
+    GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION     
             █ v0.0.1 - Development Build            `}
               </pre>
             </div>
@@ -1028,7 +1029,7 @@ export default function TruthGuardASCII() {
             <div className="mt-6 border border-green-400 p-3 rounded-border border-glow-green text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
                 <div className="flex flex-wrap gap-4 items-center">
-                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>SYSTEM:</span>  Debunk v0.0.1</div>
+                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>SYSTEM:</span>  DBNKD v0.0.1</div>
                   <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>MODE:</span>  ACTIVE</div>
                   <div className="flex items-center gap-1"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>UPTIME:</span> 99.97%</div>
                 </div>
