@@ -411,7 +411,7 @@ export default function TruthGuardASCII() {
       impact: 92,
       sources: 89,
       timestamp: new Date(),
-      summary: 'Unverified claims of coordinated attacks. Truth score low due to conflicting technical details across sources.',
+      summary: 'Unverified claims of coordinated attacks. Truth index low due to conflicting technical details across sources.',
       keyPlayers: ['FBI', 'CISA', 'Banks'],
       sentiment: 'NEGATIVE',
       connections: ['1', '2', '4'],
@@ -475,10 +475,10 @@ export default function TruthGuardASCII() {
 
     globeRef.current = new ASCIIGlobe(80, 40);
 
-    addTerminalLine('█ TRUTHGUARD SYSTEM INITIALIZED');
+    addTerminalLine('█ T-INDEX SYSTEM INITIALIZED');
     addTerminalLine(`├─ Connected to ${stats.activeRegions} regions`);
     addTerminalLine(`├─ Monitoring ${stats.totalSources} sources`);
-    addTerminalLine(`├─ Global truth average: ${stats.avgTruthScore}%`);
+    addTerminalLine(`├─ Global truth index average: ${stats.avgTruthScore}%`);
     addTerminalLine(`└─ System ready`);
   }, []);
 
@@ -546,7 +546,7 @@ export default function TruthGuardASCII() {
 
   const clearTerminal = () => {
     setTerminalOutput([
-      '█ TRUTHGUARD TERMINAL v0.0.1',
+      '█ T-INDEX TERMINAL v0.0.1',
     ]);
   };
 
@@ -577,7 +577,7 @@ export default function TruthGuardASCII() {
         if (p === 100) {
           setIsProcessing(false);
           addTerminalLine('|');
-          addTerminalLine(`█ TRUTH SCORE: ${story.truthScore ?? 0}%`);
+          addTerminalLine(`█ TRUTH INDEX: ${story.truthScore ?? 0}%`);
           addTerminalLine(`█ BIAS LEVEL: ${story.bias}%`);
           addTerminalLine('');
           addTerminalLine('├─ ABSTRACTED CONTENT:');
@@ -742,21 +742,23 @@ export default function TruthGuardASCII() {
         }
       `}</style>
 
-      <div className="max-w-[1500px] mx-auto">
-        <div className="mb-6 border border-green-400 p-6 rounded-border border-glow-green">
-          <div className="text-center mb-6">
-            <pre className="text-green-400 inline-block text-xs">
-{`╔═════════════════════════════════════════════════════════════════════════════════════════════╗
-║   ████████╗██████╗ ██╗   ██╗████████╗██╗  ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗      ║
-║   ╚══██╔══╝██╔══██╗██║   ██║╚══██╔══╝██║  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗     ║
-║      ██║   ██████╔╝██║   ██║   ██║   ███████║██║  ███╗██║   ██║███████║██████╔╝██║  ██║     ║
-║      ██║   ██╔══██╗██║   ██║   ██║   ██╔══██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║     ║
-║      ██║   ██║  ██║╚██████╔╝   ██║   ██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝     ║
-║      ╚═╝   ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝      ║
-║                                                                                             ║
-║                         GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION                         ║
-╚═════════════════════════════════════════════════════════════════════════════════════════════╝
-║   █ TRUTHGUARD v0.0.1 - ASCII Edition            ║
+      <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6">
+        <div className="mb-6 border border-green-400 p-4 sm:p-6 rounded-border border-glow-green">
+          <div className="text-center mb-6 overflow-x-auto">
+            <pre className="text-green-400 inline-block text-[10px] xs:text-[9px] sm:text-xs md:text-sm leading-none whitespace-pre-wrap max-w-full break-words">
+{`╔═════════════════════════════════════════════════════════╗
+║                                                         ║
+║    ████████╗   ██╗███╗   ██╗██████╗ ███████╗██╗  ██╗    ║
+║    ╚══██╔══╝   ██║████╗  ██║██╔══██╗██╔════╝╚██╗██╔╝    ║
+║       ██║█████╗██║██╔██╗ ██║██║  ██║█████╗   ╚███╔╝     ║
+║       ██║╚════╝██║██║╚██╗██║██║  ██║██╔══╝   ██╔██╗     ║
+║       ██║      ██║██║ ╚████║██████╔╝███████╗██╔╝ ██╗    ║
+║       ╚═╝      ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ║
+║                                                         ║
+║       GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION       ║
+║                                                         ║
+╚═════════════════════════════════════════════════════════╝
+║   █ T-Index v0.0.1 - Development Build           ║
 ║   └─ Monitoring global narratives in real-time   ║
 ╚══════════════════════════════════════════════════╝`}
             </pre>
@@ -764,11 +766,11 @@ export default function TruthGuardASCII() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2">
-              <div className="border border-green-400 p-4 h-[500px] relative rounded-border border-glow-green"
+              <div className="border border-green-400 p-4 h-[500px] sm:h-[500px] md:h-[550px] relative rounded-border border-glow-green"
                    onMouseEnter={() => setIsMouseOverGlobe(true)}
                    onMouseLeave={() => setIsMouseOverGlobe(false)}>
                 <div className="absolute top-2 left-2 text-xs text-yellow-400 z-10">
-                  ◉ GLOBAL TRUTH NETWORK
+                  ◉ GLOBAL NETWORK
                 </div>
 
                 <div className="absolute top-2 right-2 text-xs text-green-400 z-10 flex items-center gap-2">
@@ -832,7 +834,7 @@ export default function TruthGuardASCII() {
                 )}
               </div>
 
-              <div className={`border border-green-400 p-4 ${getTerminalHeight()} mt-4 overflow-y-auto rounded-border border-glow-green terminal-font`} ref={terminalRef}>
+              <div className={`border border-green-400 p-4 ${getTerminalHeight()} mt-4 overflow-y-auto rounded-border border-glow-green terminal-font max-h-[400px] md:max-h-[500px]`} ref={terminalRef}>
                 <div className="text-xs space-y-1 text-green-400">
                   {terminalOutput.map((line, index) => (
                     <div key={index} className="font-light">{line}</div>
@@ -848,7 +850,7 @@ export default function TruthGuardASCII() {
             </div>
 
             <div className="space-y-4">
-              <div className="border border-green-400 p-4 h-[250px] overflow-y-auto rounded-border border-glow-green">
+              <div className="border border-green-400 p-4 h-[250px] sm:h-[300px] md:h-[350px] overflow-y-auto rounded-border border-glow-green">
                 <div className="text-sm mb-3 text-yellow-400 flex items-center justify-between">
                   <span>◉ DETECTED NARRATIVES</span>
                   <span className="text-xs text-green-400 pulse">LIVE</span>
@@ -911,7 +913,7 @@ export default function TruthGuardASCII() {
               </div>
 
               {selectedStory && (
-                <div className="border border-green-400 p-4 rounded-border border-glow-green h-[670px] overflow-y-auto">
+                <div className="border border-green-400 p-4 rounded-border border-glow-green h-[670px] max-h-[80vh] overflow-y-auto">
                   <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
 
                   {isProcessing ? (
@@ -934,7 +936,7 @@ export default function TruthGuardASCII() {
                     <div className="space-y-3 text-xs">
                       <div className="grid grid-cols-2 gap-3 p-3 border border-green-400 rounded-border">
                         <div>
-                          <div className="text-yellow-400 mb-1">TRUTH SCORE</div>
+                          <div className="text-yellow-400 mb-1">Truth Index</div>
                           <div className={`text-2xl font-bold ${
                             (selectedStory.truthScore ?? 0) >= 70 ? 'text-green-400' :
                             (selectedStory.truthScore ?? 0) >= 50 ? 'text-yellow-400' :
@@ -1027,10 +1029,10 @@ export default function TruthGuardASCII() {
             </div>
           </div>
 
-          <div className="mt-6 border border-green-400 p-3 rounded-border border-glow-green">
+          <div className="mt-6 border border-green-400 p-3 rounded-border border-glow-green text-xs sm:text-sm">
             <div className="flex justify-between items-center text-xs">
               <div className="flex items-center gap-4">
-                <span className="text-green-400">█ SYSTEM: TRUTHGUARD v0.0.1</span>
+                <span className="text-green-400">█ SYSTEM: T-INDEX v0.0.1</span>
                 <span className="text-green-400">█ MODE: ACTIVE</span>
               </div>
               <div className="flex items-center gap-4 text-green-400">
@@ -1042,13 +1044,13 @@ export default function TruthGuardASCII() {
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-4 gap-4 text-xs">
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
             <div className="text-center p-3 border border-green-400 rounded-border">
               <div className="text-yellow-400">SOURCES</div>
               <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>
             </div>
             <div className="text-center p-3 border border-green-400 rounded-border">
-              <div className="text-yellow-400">AVG TRUTH</div>
+              <div className="text-yellow-400">AVG TRUTH INDEX</div>
               <div className="text-2xl font-bold text-green-400">{globalStats.avgTruthScore}%</div>
             </div>
             <div className="text-center p-3 border border-green-400 rounded-border">
