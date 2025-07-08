@@ -1,0 +1,47 @@
+/* components/Globe.module.css */
+.container {
+  position: relative;
+  width: 100%;
+  background: transparent;
+}
+
+.canvas {
+  width: auto !important;
+  max-height: 500px !important;
+  margin: 0 auto;
+}
+
+.tooltip {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 350px;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 10;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.tooltip h3 {
+  margin: 0 0 15px;
+  font-size: 1.3rem;
+}
+
+.tooltip p {
+  margin: 5px 0;
+}
+
+.tooltip button {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
