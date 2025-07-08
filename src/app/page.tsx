@@ -816,10 +816,18 @@ export default function TruthGuardASCII() {
 
                 {(hoveredStory || selectedStory) && (
                   <div className="absolute top-12 left-2 bg-black border border-green-400 p-2 rounded-border text-xs max-w-xs">
-                    <div className="text-yellow-400 font-bold mb-1">{(hoveredStory || selectedStory).location.name}</div>
-                    <div className="text-green-400">Category: {(hoveredStory || selectedStory).category}</div>
-                    <div className="text-green-400">Sources: {(hoveredStory || selectedStory).sources}</div>
-                    <div className="text-green-400">Truth: {(hoveredStory || selectedStory).truthScore}%</div>
+                    <div className="text-yellow-400 font-bold mb-1">
+                      {(hoveredStory || selectedStory)?.location?.name ?? ''}
+                    </div>
+                    <div className="text-green-400">
+                      Category: {(hoveredStory || selectedStory)?.category ?? ''}
+                    </div>
+                    <div className="text-green-400">
+                      Sources: {(hoveredStory || selectedStory)?.sources ?? ''}
+                    </div>
+                    <div className="text-green-400">
+                      Truth: {(hoveredStory || selectedStory)?.truthScore ?? ''}%
+                    </div>
                   </div>
                 )}
               </div>
