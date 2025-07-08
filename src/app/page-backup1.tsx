@@ -35,7 +35,6 @@ const ModernProgressBar = ({ value, max = 100, width = 20, showPercentage = true
 export default function TruthGuardASCII() {
   const [stories, setStories] = useState<Story[]>([]);
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
-  const [hoveredStory, setHoveredStory] = useState<Story | null>(null);
   const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
@@ -376,15 +375,6 @@ export default function TruthGuardASCII() {
                 <div className="h-full w-full flex items-center justify-center cursor-move select-none">
                   <Globe stories={sampleStories} />
                 </div>
-
-                {(hoveredStory || selectedStory) && (
-                  <div className="absolute top-12 left-2 bg-black border border-green-400 p-2 rounded-border text-xs max-w-xs">
-                    <div className="text-yellow-400 font-bold mb-1">{(hoveredStory || selectedStory).location.name}</div>
-                    <div className="text-green-400">Category: {(hoveredStory || selectedStory).category}</div>
-                    <div className="text-green-400">Sources: {(hoveredStory || selectedStory).sources}</div>
-                    <div className="text-green-400">Truth: {(hoveredStory || selectedStory).truthScore}%</div>
-                  </div>
-                )}
               </div>
 
               <div className={`border border-green-400 p-4 ${getTerminalHeight()} mt-4 overflow-y-auto rounded-border border-glow-green terminal-font`} ref={terminalRef}>
@@ -418,8 +408,6 @@ export default function TruthGuardASCII() {
                           : 'border-green-400 hover:story-card-hover'
                       }`}
                       onClick={() => analyzeStory(story)}
-                      onMouseEnter={() => setHoveredStory(story)}
-                      onMouseLeave={() => setHoveredStory(null)}
                     >
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-2">

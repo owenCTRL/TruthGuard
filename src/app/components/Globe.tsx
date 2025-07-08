@@ -1,7 +1,6 @@
 // components/Globe.tsx
 import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import styles from './Globe.module.css';
 
 // Define the Story interface
@@ -76,16 +75,6 @@ const Globe: React.FC<GlobeProps> = ({ stories = [] }) => {
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-
-    // Set up OrbitControls for rotation, zoom, and pan
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = false;
-    controls.dampingFactor = 0.05;
-    controls.rotateSpeed = 0.5;
-    controls.zoomSpeed = 1.0;
-    controls.panSpeed = 0.5;
-    controls.minDistance = 2;
-    controls.maxDistance = 5;
 
     // Create globe
     const globeRadius = 1;
@@ -176,10 +165,8 @@ const Globe: React.FC<GlobeProps> = ({ stories = [] }) => {
       requestAnimationFrame(animate);
 
       if (!isHovered) {
-        globe.rotation.y += 0.005; // Sweeping rotation when mouse is not hoveringsdf
+        globe.rotation.y += 0.005; // Sweeping rotation when mouse is not hovering
       }
-
-      controls.update();
       renderer.render(scene, camera);
     };
     animate();
@@ -205,8 +192,6 @@ const Globe: React.FC<GlobeProps> = ({ stories = [] }) => {
     return () => {
       window.removeEventListener('click', onClick);
       window.removeEventListener('resize', onResize);
-      mountRef.current.removeEventListener('mouseenter', onMouseEnter);
-      mountRef.current.removeEventListener('mouseleave', onMouseLeave);
     };
   }, [stories, isHovered]);
 
