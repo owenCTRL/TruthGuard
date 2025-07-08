@@ -1040,7 +1040,7 @@ export default function TruthGuardASCII() {
                 <span>█ ALGORITHMS: <span className="text-green-400">OPTIMAL</span></span>
                 <span>█ QUEUE: <span className="text-yellow-400">{stories.filter(s => s.bias > 30).length}</span> PRIORITY</span>
               </div>
-              <div className="text-green-400 pulse">███</div>
+              <div className="text-green-400 pulse">█</div>
             </div>
           </div>
 
