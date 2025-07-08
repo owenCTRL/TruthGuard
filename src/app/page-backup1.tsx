@@ -47,7 +47,7 @@ export default function TruthGuardASCII() {
   });
 
   const terminalRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | undefined>(undefined);
+  //const animationRef = useRef(null);
 
   const sampleStories: Story[] = [
     {
