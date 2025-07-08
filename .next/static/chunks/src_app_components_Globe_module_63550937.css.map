@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///Users/owentillger/Documents/GitHub/TruthGuard/src/app/components/Globe.module.css"],"sourcesContent":["/* components/Globe.module.css */\n.container {\n  position: relative;\n  width: 100%;\n  background: transparent;\n}\n\n.canvas {\n  width: auto !important;\n  max-height: 500px !important;\n  margin: 0 auto;\n}\n\n.tooltip {\n  position: absolute;\n  top: 20px;\n  right: 20px;\n  background: rgba(0, 0, 0, 0.85);\n  color: white;\n  padding: 20px;\n  border-radius: 8px;\n  max-width: 350px;\n  max-height: 80vh;\n  overflow-y: auto;\n  z-index: 10;\n  font-size: 0.9rem;\n  line-height: 1.4;\n}\n\n.tooltip h3 {\n  margin: 0 0 15px;\n  font-size: 1.3rem;\n}\n\n.tooltip p {\n  margin: 5px 0;\n}\n\n.tooltip button {\n  background: #ff4444;\n  color: white;\n  border: none;\n  padding: 8px 12px;\n  border-radius: 4px;\n  cursor: pointer;\n  margin-top: 10px;\n}"],"names":[],"mappings":"AACA;;;;;;AAMA;;;;;;AAMA;;;;;;;;;;;;;;;;AAgBA;;;;;AAKA;;;;AAIA","debugId":null}}]
-}
