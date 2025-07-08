@@ -638,11 +638,9 @@ export default function TruthGuardASCII() {
     return globe.toString();
   };
 
-  // Calculate terminal height dynamically to align with story details
   const getTerminalHeight = () => {
-    if (!selectedStory) return 'h-[250px]';
-    // Match the height of the story details panel when displayed
-    return 'h-[420px]';
+    if (!selectedStory) return 'h-[calc(283px)]';
+    return 'h-[283px]'; // Start with this and adjust
   };
 
   return (
@@ -743,8 +741,8 @@ export default function TruthGuardASCII() {
       `}</style>
 
       <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6 overflow-hidden">
-        <div className="mx-auto max-w-screen-xl">
-          <div className="mb-6 border border-green-400 p-4 sm:p-6 rounded-border border-glow-green">
+        <div className="mx-auto max-w-screen">
+          <div className="p-4 sm:p-6">
             <div className="text-center mb-6 min-h-auto overflow-y-hidden overflow-x-hidden max-w-screen">
               <pre className="text-green-400 block text-[4px] sm:text-[8px] md:text-xs leading-none whitespace-pre break-words">
   {`
@@ -765,7 +763,7 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div className="lg:col-span-2">
-                <div className="border border-green-400 p-4 h-[500px] sm:h-[500px] md:h-[550px] relative rounded-border border-glow-green"
+                <div className="border border-green-400 p-4 h-[550px] relative rounded-border border-glow-green"
                     onMouseEnter={() => setIsMouseOverGlobe(true)}
                     onMouseLeave={() => setIsMouseOverGlobe(false)}>
                   <div className="absolute top-2 left-2 text-xs text-yellow-400 z-10">
@@ -847,215 +845,382 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="border border-green-400 p-4 h-[250px] sm:h-[300px] md:h-[350px] overflow-y-auto rounded-border border-glow-green">
-                  <div className="text-sm mb-3 text-yellow-400 flex items-center justify-between">
-                    <span>◉ DETECTED NARRATIVES</span>
-                    <span className="text-xs text-green-400 pulse">LIVE</span>
-                  </div>
-                  <div className="space-y-2">
-                    {stories.map((story) => (
-                      <div
-                        key={story.id}
-                        className={`border p-3 cursor-pointer transition-all rounded-border ${
-                          selectedStory?.id === story.id 
-                            ? 'story-card-selected border-yellow-400' 
-                            : 'border-green-400 hover:story-card-hover'
-                        }`}
-                        onClick={() => analyzeStory(story)}
-                        onMouseEnter={() => setHoveredStory(story)}
-                        onMouseLeave={() => setHoveredStory(null)}
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <div className="flex items-center gap-2">
-                            <span className={`text-lg ${
-                              story.category === 'DEFENSE' ? 'text-red-400' :
-                              story.category === 'ECONOMICS' ? 'text-green-400' :
-                              story.category === 'CYBER' ? 'text-purple-400' :
-                              story.category === 'ENERGY' ? 'text-yellow-400' :
-                              'text-white'
-                            }`}>
-                              {getMarkerSymbol(story.category, story.severity)}
-                            </span>
-                            <span className="text-xs font-bold text-green-400">{story.category}</span>
-                          </div>
-                          <span className={`text-xs ${
-                            story.severity === 'CRITICAL' ? 'text-red-400 pulse' : 
-                            story.severity === 'HIGH' ? 'text-yellow-400' :
-                            'text-green-400'
-                          }`}>
-                            {story.severity}
-                          </span>
-                        </div>
-                        <div className="text-xs mb-2 text-gray-300">{story.title}</div>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div>
-                            <span className="text-yellow-400">Reliability:</span>
-                            <div className="text-green-400">
-                              {ModernProgressBar({ value: story.truthScore || 0, width: 10, showPercentage: false })} {story.truthScore ?? 0}%
-                            </div>
-                          </div>
-                          <div>
-                            <span className="text-yellow-400">BIAS:</span>
-                            <div className={story.bias > 30 ? 'text-red-400' : 'text-yellow-400'}>
-                              {ModernProgressBar({ value: story.bias, width: 10, showPercentage: false })} {story.bias}%
-                            </div>
-                          </div>
-                        </div>
-                        <div className="mt-2 text-xs text-gray-400">
-                          {story.sources} sources • {story.location.name}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {selectedStory && (
-                  <div className="border border-green-400 p-4 rounded-border border-glow-green h-[670px] max-h-[80vh] overflow-y-auto">
-                    <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
-
-                    {isProcessing ? (
-                      <div className="text-center py-8">
-                        <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
-                        <div className="text-green-400 text-xs">
-                          <pre>
-  {`    ░░░░░░░░
-    ░████████░
-  ░██████████░
-  ░████████████░
-  ░████████████░
-  ░██████████░
-    ░████████░
-      ░░░░░░░░`}
-                          </pre>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-3 text-xs">
-                        <div className="grid grid-cols-2 gap-3 p-3 border border-green-400 rounded-border">
-                          <div>
-                            <div className="text-yellow-400 mb-1">Truth Index</div>
-                            <div className={`text-2xl font-bold ${
-                              (selectedStory.truthScore ?? 0) >= 70 ? 'text-green-400' :
-                              (selectedStory.truthScore ?? 0) >= 50 ? 'text-yellow-400' :
-                              'text-red-400'
-                            }`}>
-                              {selectedStory.truthScore ?? 0}%
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-yellow-400 mb-1">BIAS LEVEL</div>
-                            <div className={`text-2xl font-bold ${
-                              selectedStory.bias <= 20 ? 'text-green-400' :
-                              selectedStory.bias <= 40 ? 'text-yellow-400' :
-                              'text-red-400'
-                            }`}>
-                              {selectedStory.bias}%
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          <div>
-                            <span className="text-yellow-400">LOCATION:</span> 
-                            <span className="text-green-400">{selectedStory.location.name}, {selectedStory.location.country}</span>
-                          </div>
-                          <div>
-                            <span className="text-yellow-400">SOURCES:</span> 
-                            <span className="text-green-400">{selectedStory.sources} aggregated</span>
-                          </div>
-                          <div>
-                            <span className="text-yellow-400">RELIABILITY:</span> 
-                            <span className="text-green-400">{ModernProgressBar({ value: selectedStory.reliability, width: 15 })}</span>
-                          </div>
-                        </div>
-
-                        <div className="mt-3 pt-3 border-t border-green-400">
-                          <div className="text-yellow-400 mb-2">◉ ABSTRACTED CONTENT:</div>
-                          <div className="text-gray-300 bg-black p-3 border-l-4 border-pink-400 rounded-border">
-                            {selectedStory.abstractedContent ?? 'N/A'}
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-3 mt-3">
-                          <div>
-                            <div className="text-red-400 mb-1">◉ BIASED CLAIMS:</div>
-                            <div className="space-y-1">
-                              {selectedStory.biasedClaims?.map((claim, i) => (
-                                <div key={i} className="text-red-300 pl-2">× {claim}</div>
-                              )) ?? <div className="text-red-300 pl-2">None</div>}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-green-400 mb-1">◉ VERIFIED FACTS:</div>
-                            <div className="space-y-1">
-                              {selectedStory.verifiedFacts?.map((fact, i) => (
-                                <div key={i} className="text-green-300 pl-2">✓ {fact}</div>
-                              )) ?? <div className="text-green-300 pl-2">None</div>}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-3">
-                          <div className="text-yellow-400 mb-1">◉ KEY ENTITIES:</div>
-                          <div className="flex flex-wrap gap-1">
-                            {selectedStory.keyPlayers.map(player => (
-                              <span key={player} className="border border-green-400 px-2 py-1 text-green-400 rounded-border">
-                                {player}
+              <div className="flex flex-col h-full space-y-4">
+                {!selectedStory ? (
+                  // Full height detected narratives when no story is selected
+                  <div className="border border-green-400 p-4 h-full overflow-y-auto rounded-border border-glow-green">
+                    <div className="text-sm mb-3 text-yellow-400 flex items-center justify-between">
+                      <span>◉ DETECTED NARRATIVES</span>
+                      <span className="text-xs text-green-400 pulse">LIVE</span>
+                    </div>
+                    <div className="space-y-2">
+                      {stories.map((story) => (
+                        <div
+                          key={story.id}
+                          className="border p-4 cursor-pointer transition-all duration-500 overflow-y-auto border-green-500 rounded-border border-glow-green border-green-400 hover:story-card-hover"
+                          onClick={() => analyzeStory(story)}
+                          onMouseEnter={() => setHoveredStory(story)}
+                          onMouseLeave={() => setHoveredStory(null)}
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-lg ${
+                                story.category === 'DEFENSE' ? 'text-red-400' :
+                                story.category === 'ECONOMICS' ? 'text-green-400' :
+                                story.category === 'CYBER' ? 'text-purple-400' :
+                                story.category === 'ENERGY' ? 'text-yellow-400' :
+                                'text-white'
+                              }`}>
+                                {getMarkerSymbol(story.category, story.severity)}
                               </span>
-                            ))}
+                              <span className="text-xs font-bold text-green-400">{story.category}</span>
+                            </div>
+                            <span className={`text-xs ${
+                              story.severity === 'CRITICAL' ? 'text-red-400 pulse' : 
+                              story.severity === 'HIGH' ? 'text-yellow-400' :
+                              'text-green-400'
+                            }`}>
+                              {story.severity}
+                            </span>
+                          </div>
+                          <div className="text-xs mb-2 text-gray-300">{story.title}</div>
+                          <div className="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                              <span className="text-yellow-400">Reliability:</span>
+                              <div className="text-green-400">
+                                {ModernProgressBar({ value: story.truthScore || 0, width: 10, showPercentage: false })} {story.truthScore ?? 0}%
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-yellow-400">BIAS:</span>
+                              <div className={story.bias > 30 ? 'text-red-400' : 'text-yellow-400'}>
+                                {ModernProgressBar({ value: story.bias, width: 10, showPercentage: false })} {story.bias}%
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-2 text-xs text-gray-400">
+                            {story.sources} sources • {story.location.name}
                           </div>
                         </div>
-
-                        {selectedStory.connections && selectedStory.connections.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-green-400">
-                            <div className="text-yellow-400 mb-1">◉ NARRATIVE CONNECTIONS:</div>
-                            {selectedStory.connections.map(connId => {
-                              const conn = stories.find(s => s.id === connId);
-                              return conn ? (
-                                <div key={connId} className="text-gray-300 pl-2">
-                                  → {conn.title} <span className="text-green-400">({conn.truthScore ?? 0}% truth)</span>
-                                </div>
-                              ) : null;
-                            })}
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  // Story detail view with navigation
+                  <div className="flex flex-col h-full">
+                    {/* Story Navigation Header */}
+                    <div className="border border-green-400 p-3 rounded-border border-glow-green mb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => {
+                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
+                              const prevIndex = currentIndex > 0 ? currentIndex - 1 : stories.length - 1;
+                              analyzeStory(stories[prevIndex]);
+                            }}
+                            className="text-green-400 hover:text-yellow-400 transition-colors text-xl"
+                          >
+                            ↑
+                          </button>
+                          <div className="text-center">
+                            <div className="text-xs text-yellow-400">
+                              {stories.findIndex(s => s.id === selectedStory.id) + 1} of {stories.length}
+                            </div>
+                            <div className="text-xs text-gray-400">NARRATIVES</div>
                           </div>
-                        )}
+                          <button
+                            onClick={() => {
+                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
+                              const nextIndex = currentIndex < stories.length - 1 ? currentIndex + 1 : 0;
+                              analyzeStory(stories[nextIndex]);
+                            }}
+                            className="text-green-400 hover:text-yellow-400 transition-colors text-xl"
+                          >
+                            ↓
+                          </button>
+                        </div>
+                        
+                        {/* Current Story Preview */}
+                        <div className="flex-1 mx-4">
+                          <div className="text-center relative">
+                            {/* Previous Story (blurred) */}
+                            {(() => {
+                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
+                              const prevIndex = currentIndex > 0 ? currentIndex - 1 : stories.length - 1;
+                              const prevStory = stories[prevIndex];
+                              return (
+                                <div className="absolute top-0 left-0 w-full opacity-30 blur-sm text-xs text-gray-500 truncate">
+                                  {prevStory.title}
+                                </div>
+                              );
+                            })()}
+                            
+                            {/* Current Story */}
+                            <div className="text-xs text-green-400 font-bold mt-4 truncate">
+                              {selectedStory.title}
+                            </div>
+                            
+                            {/* Next Story (blurred) */}
+                            {(() => {
+                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
+                              const nextIndex = currentIndex < stories.length - 1 ? currentIndex + 1 : 0;
+                              const nextStory = stories[nextIndex];
+                              return (
+                                <div className="absolute bottom-0 left-0 w-full opacity-30 blur-sm text-xs text-gray-500 truncate">
+                                  {nextStory.title}
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        </div>
+                        
+                        <button
+                          onClick={() => {
+                            setSelectedStory(null);
+                            setIsProcessing(false);
+                          }}
+                          className="text-red-400 hover:text-red-300 transition-colors text-xl font-bold"
+                        >
+                          ×
+                        </button>
                       </div>
-                    )}
+                    </div>
+
+                    {/* Story Details - Takes up remaining height */}
+                    <div className="border border-green-400 p-4 rounded-border border-glow-green flex-1 overflow-y-auto">
+                      <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
+
+                      {isProcessing ? (
+                        <div className="text-center py-8">
+                          <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
+                          <div className="block text-green-400 text-[5px]">
+                            <pre>
+{String.raw`
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNNNNNNNNNNNNNNNNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNFVVII*****IIIIIIIVIIVVVIIIIVIIIIVFNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNFVIIV**I****II***I**::IIVVIVIIVVVV**********IIIVFNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNFF**::IIIIV*VV**IIIIIVVVVVIIV*II**VIIVV***IVIV*****IVII***IVNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNVVV*I::*FV*VI**I*IIIIIIII*IIIIVVIVVIIII***VVVVVIIIIVVII*:*I******IIIVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNI**::**VIIVV*VIVV**V*IIIIIIVIIIIIIII*I**IIIIVVVI*IIIIIIIIIIIII***:******IIIIVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFI***:IIIVIVVIII***I***I*I*VI*IIIIIIIIIIIIIIIIIIIVVVVIIIVII*I**I**II::::::*******I*VNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNF**::**III**IIIII*IIII**III::*:*IIIIIIII****I*IIVIVVIIIIVIIVVVIII******V*IIII*::::****IIIVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFVII::*VIIIVVIIIIII*I*I*I*II*I*I**III***IIIIIIIIIIIIIIIIIV*IIVVFIII*IIVI**V*I*IVVIIF*:::****IIVVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNVFI**:FIV*VIIIIII*III****IIIII**I*I*I:III:II*IIIVIIIIVF*V*I*IVI*IIVVVVVIIIII*V*****IVVIIV*IIIV**IIIVFNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNVIFF**:VVVVVVIIIIIIII**IIIIIIII*IIIIIIIIIIIVIIIVVIIIVIVVVVVVIVVVIVIVVVVVVIVVVIIVIIVIIIIII***I**IIII*IVVVIFNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNVVVIV:*FFNNNIIIIIIVIIII*I**II*IIIIIII***:**IIIIIIVIIVVVIIVVVVVVVVVVVVVVVVVVVVVIVVVVVVVIIIVI**:*******IV*IIFNVIFNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMNNVVV:I:*VVNFNNFI*IIIIIIV**I*IV***IIII*IIII.I**:.::..:II*IIVVVVVVVVVVVVVVVVFVFVVVFFVVVVVIVVVVVVVI***:*I****IIFFFNN*IVNMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMNNFVI*I:*IFNVVVNVVVI**II**III**I******II*III*.:III:II*IIIIIVVVVVVVVVVVVVVVVVVVVVVVFFFFVVVVVVVVVVIV****I**II***VI*FV**II*FNMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMNFVI*I**INVVVVVVNFII****I*IIIIII***I**I*II*III*FI*IIIIIIVIVVIVVVVVVVVVVFFVVFVVFVFFFVVVVIIVVVVVVVVVVIVI*VIVII*IIIIVVNNI*:***NNMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMNFVI:II*FVV*IIFVIIVNIIII*I*IIIVIVV****IIII:**IIIVVVFVVIIIIVIIVVVVVVVVVVVVVVVVVVFFFFFFFFVVVVVVVVVVVVVVVIIVVVVIFFIFFFFVFN*:*****INNMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMNNF*:II:II*INIINFVIIVII***IIIIIVIVV*****IIV****IV:*IIIIIIIIVVVVVVVVVVVVVVVVVFVFFNFFFFFFFVFVVVIVFVVVVVVVVVIVFVFFFFFFFFFFVNI:*:**IIIVNMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMNFV:I**IVVNNI*IVNVFIVI**II***I*IIVIVVVI**IIII*I**VIVIIIIIIVVIVIVVVVVVVVVVVFFVVVIVVVIFF*VIVVVFIVFVVVVIVIIIVVVVVFVFFFFFFFVFFFF::*IIIVVVNNMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMNFI***VIVFFNNNFVNNNNFVVVV*I*I*I*****IVVIVVVF*IVIIIVIVIIIIIIIVVVIVVVVIVVVVVVVVVIIIIIIIVFFFFFVVIII**VII**IVVVIIVVVFFFFVFFFNFFNVI::V*IFIIVVNMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMNNV:I*FVVIFNNNNNIINNNNNNNVV*I*II*******III*IIIII*II**FIIIIIIIIIIIVVVV*VVVVVVVVVVVVVI**IV**IIIIIVIIIFIIVIIIIVVIIVVFFFFFFFFNNNNNI:::*VVVVVIVVNMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMNF****V*INNNNNNIIFNNNNNNNNVV*********I************II*V:I*IIIIIIIIIIIVVVVVVVIVVFI**VVVVFVIFVFVIII*VI*V*VIIVVVVVFVVVVVVFVFFFFNNNFI**::**VFVVVFVNNMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMNF**:FVFINNNNNNI*VNNNNNNNNNVIIIF:I***I*III*IIIII*I*****IIII*I*IIIIIIIVIVVIVVVIIVVVIVIIIVIVVFIIIIIVFIVIFVFFFFFFVVFFVVVVVFFFFNNNNII**:::**IVVIFVVNNMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMNV**IVVVFFNNNNNNFFNNNNNNNNNNVV**NNNN**II*IIIIIIIIIII**I*IIIIFVI*IIIIVIIIVIVIIV**VVIIVVIFVVIVIIVVVIVV*FFFFFFFFFFVVFVVVVVVFFFFFNNNVI:*:::***VIVVFIVNNMMMMMMMMMMMMMM
+MMMMMMMMMMMMNI*IIVFI*VNNNNNFFFNNNNFNNNNNVNVIFNNNN**IIIIIVVIVVV***I*I*I*IIIIIIIIIIII*V*I:*IIVFVVVVVVVIVVIIII*::I*V*VFFFFNNFNNNNFFFFVFFVFFFNFVIVII**::::*I*IVVVVVNNMMMMMMMMMMMMM
+MMMMMMMMMMMNIIIV*I*IINFFFFFFVFVVFFFFFNNIINIVIINNNV***IIVVIVVVII*IV**IIIV*VIIIIIVI**IVV**IVIVVVVVVIVV*:VIIVV:*:*VVFFVFFVFNFNNNNNNFFFFFFVFFFFFIIV***::::::*I**FIVVNNMMMMMMMMMMMM
+MMMMMMMMMMNVI*F***:IVFVFFFFFFVFFNFFVFFIIINNNVIINNI****IVVVVVFIV*IVIIIII*VIVIIIV*:VIIIV*VVVVVIVI**IIVFV**IIFFNNNNNFNNNNFNNNNNNFFNNNNNFFFVVFFVV*:I*:::::::::::VIIVFNMMMMMMMMMMMM
+MMMMMMMMMNFIIF:I:**IVFFFNFFNNNNNNNNNV*I*F*NNIIIINNNVIIIVVVVVFV*III*IIIIVIIIII:**VIV*VVIVVVVVVV*VVFFFFVFFFNNNNNNNNNNNFNVFFVVFFNNNNNNFNFFVVVVVF:*:::::::::::::*I*IVVNMMMMMMMMMMM
+MMMMMMMMNNNFI*:I:**IVVNFVFFNNNNNNNNFIVVIINI:I*VINNNFFIIIVVVIVII*II*II*III:*VI**VVVIIIIVVVVIIIVVFFFFFNNNNNINNNNNNNNNVFVVVIIFVFNNFFVFFNNFVVVVVFFI:::::::::::::**I*IVINMMMMMMMMMM
+MMMMMMMMNNIV*::::**I**FVNNNNNNNNNFIVII*NFNNN*:*VINNNNFVIIVVVVVVVIIIII**IV*IIIIFVI*VII***VIVVVVVFNNNFFVVNNNV*NNNNNNVVIVVVVVIVFNNFIVVFVNNFVVVVFV:::::::::::::***IIIFVFNMMMMMMMMM
+MMMMMMMNNVI:.:*****IVIVVIIIV*IIFNFVIFNNNNNNNNNF*IINNFFFFFIVVVFVVVVVIIIII**IIV*VIIIIII**IVVVIVVIFNFFFIFFIIVVFFNNNNNVVIVVVIVVIFNNNFFVIFNNNFVVVVVV::::::::::::*I**VIFI*NMMMMMMMMM
+MMMMMMMNV**:::::IIIIV*:VI*V:II*VFVIINNNVFFNNNNNN*IFFFFFFIIIIVFVVVFVVVVI*II*I*****IIIVIVIIVVVVVVIVVFIIFVFVVVNFIII**IVVIIVVVVVFNNFVVFVVNNNNFVVVVI.:::*::***VII*IFVIF**FNMMMMMMMM
+MMMMMMNN**::::.:::**IIIIVVII*I*IIII*INNNNNNNNNNN**IFFFFFFFIIIVVVVVIII*II*I**I*II*I**VFVVVVVVIVIFFFVIIVFFVVVNVVII*IVVFVIVVFFVVVFVFVIIIFNNNFVVVVI::*::*V**I****IVIVFI*VNMMMMMMMM
+MMMMMMN*I:*:::.:::*:*I*II*I**I*I::*IIIIVFNNNNNNFI***FFFVVFFVIVVFV:I*I*II*IVI**IIV:I*IVFFVNFFVVFFFVFII*VVFVV*:**I*IVIINFFFNFFFFVVIIVIIVNNNFIIVFI::II*:VF*FIV**FVIFV*IIFNMMMMMMM
+MMMMMNF***::::::II::I*IIIIIIIIIIIII*I**IVNNNNNFFFFI*IIFFFFFFVVIVVVVVVIIVVII*IIIIIII*VIFNVVFVFVFFVVVIIIIFVIVIVFV*VI*VVVFFFNFFFVVVFVVIIIVVNNNII*I:I*VI*IFI*VIVIVIVFII*IINMMMMMMM
+MMMMMNII*:.*::::::.**:IIVIIIIIIIIII***IIIIFVFNFFFFFF*V*FVVFFVFFVVVFFFVVIIVVVIIIIIIIVVVFNNVVNFVFFIVFVVVFFVVINFFNVII*IVIVFV*VFIVIVIIV**VIVNNNNIIIII*:II*F*VVNIIVVFVI***NNNMMMMMM
+MMMMNNV::I*:::...:::*VIIIIIIVI*VIVVVI***IIIVVFFFFFFFFIFFFFFFFFFFVIVVVIVFFVVIIVIIIIIVVINNNFFNFFFFF:VVN*VVVVFFFNNIII*IIIVIV*II*I*VNFFVIIIIIFVVVI*V**:*IVFFFVVNFVVVVI*IFNFNMMMMMM
+MMMMNFI::::::..::::I*VIIIVVIVII*IIIFI*III*IIIIVIIFFFFFFFFVFFFFFFFVVIVVVFVVVVIIIIIVVVFFVFFFVVVVFFV:IFFNFVFVVVFNNNIIFVF*FVIIVVIIIFIF**V**FVFIIVVIIVI**IIVI*IFVFIVNIIIFVFFNMMMMMM
+MMMMNV*:*:*:....:::*IIII*IIVIIIIIIIIIVI:*IIVIVVVFVFFFVVVVFFFFFFFVVVVVVVFFVVVII*IIIIVNFVFNFVII:V.I*IIFFVFFFFFNNNFNFNFFVIIVIVVIIVF*FF:**INVNVVFVII*VIIIIVIIVVIFI*****VFNVNMMMMMM
+MMMMNI::***::*I:::**:*I*V**IVIVIIIVVFFVI:IIVVVVVFFVFFVVVVVFFFFFFFFFFVVFVFVVVVIIIIIIVFFNNNNVVI*VIV*.:*FFIVVFFFFNFFVFIVIIFVVFFV*II*V***II*VIII*V*VIIFVFFVVIFF*I::::I:FFNVNNMMMMM
+MMMMNI::*:::::I**::*VIVVIIIIIIVII*VVFFFFV*IIIVVVVFFFFFFFFFFFFFFFFFFFVVVVVVFI*II*IVVIVFFFNNFVV*:VFI::*FVVVIIVFVFFVVFFFVVFFFFVIV*IV*VIVIVII**VVFVIIIIVVVFIIFFVFVII***NFFIFNMMMMM
+MMMMNV:::*::*::I:::*VII**IVVVVIIVIVVFFFVFVIIIIIVFFFFFFFVVFFFFFFFFFFFFVVV*IIVIIVVIIIIVIIVVVVNIV*IVFFIIIVIFVVVFIVVVVVVVIFFNFVIIIV::F*F**IVVVIIIVIIIIIIVVIIFFVF**VN*IINFINFNMMMMM
+MMMMNV:::*:*::.:II*IIIIVI**IVVVVIIVIIVFFFFFFVVVFFFFFFFFFFFFFFFFFFFFVVVI*VIFVVVVVI**IIV*I**IVVVI:FIIVI*:VIIIIFVVIVIFVVVNNNVIV*V*:IIF*IF:V*I*IFIIIIIVVIII*F*IFNNNNIFFNFVFVNMMMMM
+MMMMNF*::**.::****IIIIIVVV:IIVVVVIIVFFFFFFFFFVVVVIFFFFFFFFFFFFFFFFFFVIVIFIFVVVV*I*IV***IIII**III.IVI:**..VVVIFV**IVIIFFFVNFVII**IIVF*II*V:IV*IIIIIIIIFVVFVFFNFVVNVFFFVFFNMMMMM
+MMMMNFV::::******IIIFVVVIFVVVVVFFFFVFNFFFFFFVIVIFFFFFFFFFFFFFFFFFFFVVVVVVVFIVVI*IV*:*IVII**I**II:VI*II:II*IIVFVIIIIVFFNVFNFFVVI:*FVNI:*V**V**VIVVII:VVFFFIFFNVFFFVFVFNNNNMMMMM
+MMMMNFV*:***II**I*IVII*I*II*IVFFFFIFFNNFFVVFVIFFFFFFFFFFFFFFFFFFFFIVVVVVVIV*FF:II*VVIIVIII*I*I*IIII*****IVVVFFFFNVVVVFVVVVVIFFI*:IF*V:F*:*:V*VFFVI*:IVIIIVF:VIFFFFFNFNNNMMMMMM
+MMMMMNIVIV*III*I***:IF**IIIVIIVVFFFFNFFFV*IVVVFFFFFFFFFFFFFFFFVIIVFVVVVVVVIVVVI**VVFFVIIII*V****IIIIII*I*IIII*IFIFFVIF*VVF*VFFV**IIIIFFI*FVII*VIFIVVI*IIIV*FVIIINFFVFFFNMMMMMM
+MMMMMNFVIVVI*I*I.:*:*IIIIII*IIIVFVFVFFII*IIIIIVVVVFFFFFFVFFFFFVIVFVVVVVIVVVVVVVI*II**IIIFVVVVV**I*IIIIIIVIV*::FNNVIVII**VVFI*VVIVFVVIVFFIFF*I:I*F**IIVVVV*FVFFVFFVFNFVFNMMMMMM
+MMMMMNNI:VIIVVII**::**IIII*IIII*IFVVVIVVIIIIIIIIIVVIFFFVVFFFFFFFFFFVVVVIIIVIIVVVVI**V*III*I*IVIF*IVFFFFVIFNFFNFFFNNIIVFI**:V*VFF:IV*I**III*::I:***I*:VI***IIVFNVVVIIFVNMMMMMMM
+MMMMMMNIVIIIII**::.:.**VVII*V**IIIIVFFFVVVIIIIIIIVVVVFFFFFFFFFFFFVVVVVVIIIIVIIVI:*V::**I::I*II**F*I*VNIVVFFVNNNFFFFI*I***V*.:.*::**:I:IF*VV::VIVI:VIVVVFVFIIFIFN*VIVIVNMMMMMMM
+MMMMMMNFVVVVI*:I::.:::IIVV::::*II*IFFFFFVFVIIIIIIIVVVFFFFFFFFFFFFFFVIIIIVIIIIV*:I*IVIV::**V*III:VVFVNIFFFFFFFNFNNFFVFVV:I.*.::::*I*:IVIF:**V*I*V**IIIIVVVIFFVNNIIV*NVNMMMMMMMM
+MMMMMMMNVVFFVI*:*....:::::.::*II*****IIIIVVVVIVIVIIFFFVFFFFFFFFFFV*IVVVVVVVIII**I:I***V*VFFVIVVFVVV*FFFFFFFFFFFNV*IIIFF**I::F*F*I*VIIFIFFV**I:::*I*IIVIVIVFNFNFVFVVVFNMMMMMMMM
+MMMMMMMNNVVVVV*:*I:..:....:***FF*V*IFIVVFIVFFVVIVFVIVVFFFFFVFFIVVFFVVVVI*IIIII:*:.:IIVFFFFFFVIVFFNIVFFVFFFFFFFFFFFFIVFFFFVFFFFFVFFFFVIIVII*:.::**VIVV*VFVFFFIIIFFVVVNMMMMMMMMM
+MMMMMMMMNFVV**:*VI*:.......*:::II*I*VVFFFVIVVVIIVVVFFFFFFFFFFFVIVVFFFFVFVVVIVI*:*I:*IIVFFIVFFFFFVVFFVII*FFFIVFFFFFNNFNFNNNNVFFFFVFFFFVV*I**:::IFV:IVVIVIVFVIIIVFVVVNNMMMMMMMMM
+MMMMMMMMMNFI*IV*IV*............:IIVIFVIFI*FVFNVFNNFNFFFVVFFVVFFFVVVVVVI*I***:*:***IFFFIFFVFFFFFVIFFFFVVFFFFFFFFFFFFFFFNNNFNNNNNNNFFVFFFF**.I*VII*IFVVFVVVVV*FII*VVFNMMMMMMMMMM
+MMMMMMMMMMNVI:IIFI**:...:..:.*.I*IFVFFFFII*VIFVVFVFFFFIVVVIFVIVVVVVVII*III*::*IIIIIFIFFVVFFFFFFFFFFFFFFFFFFFFFVFFFFFNNNN*VNNNNNNNNFFVFV*::.I:*VV:VIVFIVIFIIV***VVFNMMMMMMMMMMM
+MMMMMMMMMMNNVIIV:VII*:....::.::*....::VVVFFFFIV*I*IFIV*:*IIIVIIFVVIV:**:.:.IVIIVVVVIVFFFFFFFFFFFFFFFFFFFFFFFFVFFFFFFFFFFFFFFFNFNNNNFF::::.:*VI.VFFIV:*I**III*:IVFNMMMMMMMMMMMM
+MMMMMMMMMMMNNF:II*II.*:...........*VV:IFIVFFNNIFIFIIII*IIIVIV*II*:*:..::IIIIVIVFVVFFIFFFFFFFFFFFFFFFFFFFFFFVFFFFFFFFFFFVVFVFFFFFFFFNV*I*V:::*::*F*VVI*I*I**IIIVVNMMMMMMMMMMMMM
+MMMMMMMMMMMMNNIFFVFF***...........:*VII:*VVFFFVVIFVVVFFFFFVFV**I:*:**IIIVFVFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFVFIFFFFFFVIVIIIIVVFFFFFFFNNNFVFFVI*:**:IFFF*IV**VVIIVVNMMMMMMMMMMMMMM
+MMMMMMMMMMMMMNNIIIIIVF*::.*V::........*VIII*VFVFFFFFFFFVVFVV*:IIIVIVIVIFFVVFVVIIVFFFFFFFFFFFFFFFFFFFFFFVVFFFFFFFFFFVVIIVIFVIIVVFFFNNNFNFN:NIVFV:IVFVF*I**V*IVVNMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMNNIVVFVFNIV:I**..*..*:......*V*VF*:....:IVVV::*V:*IVVVVFFVIVFVV*IVVVVVFFFFFFFFFFFFFFF*VFFVIFFFFFFFVVI*IVIFFIFFVVFFFNNNVINNFFIIFFNNIFIV**II**VVVNMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMNFIVVV**VVIVNVI*VVV*::*.II:**......*FF**IIV*:IVIFFVIVV**IVVVVVVVIIIIVFFFFFFFFFFFFFFIIFVFFFFFFFFFI*III*::IVFFFFFVNFV:..FIF*NFNNFFFFFVI**:*FVFNMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMNFVIFVFNFFVVVVVIINNVV:.:*:.*.....::....I*::*IVIII:*FVVIIVVVVVII*VIVVIVFVVIVI*VIFVFFFFFIFFFFVFVI**:*::::VVV*FVFII:.::*NIVVNNFNFFVII****V*VFNMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMNNFVF*IVI*FVFVFNNVV**I:.:VFVFIVFVF*F:..I:VIIVFVVV*....::*VVVIVVIIVIVIIVVI*:...*I:II:I.FFVVFFF*F**:.*:**:*:*..VIII*VFFFVNNNFVV*IIFF***IVNNMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMNFVFII*VVNIVFI::*:*FFIFV:..:..INIFF*I::I:***IIII**F:I:**::::::I*:IV:....*:*FVFFFFFFVIVIFFV*:::**::....IV*IVIIIIFIFFFNNFVVI*:*F*IIIVFNMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMNNFFFFVFNNIFFIFIIFFFFVIV*:*:*:IFNV*::VIVFI*VVVVFVI*VIVIFII***IIIVVFFVFFFFFFFV*FV:FIIFVVFVI**.::VVIIIVVIVI*I*IVFNFNNIVFVI::IF***FVNNMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMNFFFNNVFVVVFV**VI*VFFFIVI:*I**FFFV*VFV:*:IV:I.IIVVVVII::**::*:I**FFFFVFFIIIIVFVII**III:.:..*VIVVIIIVI*IIIF*VVNNFFVV*I:*IV**IVFNMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMNFFNN*NFVFNFFFIVV**IFI*NNV*I::::FIV*VIVV:*..::II*.I*:*II.IIII***IVI*:.*:..:IVII**V::*VI*.:VIVVVII:*IIIVIIFIII*V**:*V*VIIVFNMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMNNFFNFFII*VVFVV*VVIIFFVN*VIIIVI.:...:I*:*::..::*:..:.:.**:::*::I::II::::*:I*IV**II**I*.*FI*IV*::*II*INF**VVI*:.:*I***IFNMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFFV*FV::*VV*VIFFFV**NN*V**III:*:**:::......:II*..I:***I:*:*..:**I:*I:.:*I**:*FV*I*II**V*IVVVV*IVI*IIF**IF:*I****VNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNFIF*FIVIVVF*VFFNNFIIVIN**::**INVI*I*...::*:*:**V*::::::*I:::**:FFVVVFFII:::FI:**III*F*V*FVII*VIIIVV**I:***FNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFIFFFFVVVVVVVFFNFV*NNNVFFNVVIVNVVF:I*IF::*:.:**IV*:::*I*V**:I**::IV::II:FI***I*V*V*III*FFIIV*IV**III***NNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNVI*FVVVVVVVFFFFNNNFVVFIIVVIIII**I**:*IV*:.:*VF*I*IIVVVIVFF*VIFIVVVIFIVFVIIFFVIVIFF*VVVV*NNFI*FIVVVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFVVVVVVVVVFFI*FFNFV:VIVFNIFVFFVI*VIVVIIIFIVFVIVI******IFFVFFFVNNNFNFFFNV::**:VIF*VVFIIFV*IFFVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFVVVVVVVIFFNFINNFVVFVNNNFFNFNFFFFFVFFFIFIVFFFVFFIIFNNFNNN*FIIVIVNFI*:III*V*IVIV*:*IFNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFVVVVVV*FFNVFNFFFNFNNNNNFNNNNNFFVVVFVIVFIFVVFFVIIIIVNVFIINFNNNVFF*I*I*FVVVVF*:*IFNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNVVVVVVFFFFNFFFV*IVVFFFVVVVIIVIIIVFFFFFFVFFVIIFVFFFFNVI*VIIVVVIVIFVIVVIVVFNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNFVVFFFFFFFVFVFFVFIVVVFFFFFVIIFVIFFVFFVFFFFVVVVVVINVIVFV***I*II*IFNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNFFFFVNFFNNNNNFVFFFNNNFINFIIVVVFFFVFFFFNVNFFFVVVFFFFIFIFNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNFVVIVFFVV*VVVIVIIIFNNINNFFFVFFNNNNFNVFFFNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNNNNFFFVVIVVIVVVVFFFFFFNNNNNNNNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+`}
+                            </pre>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-3 text-xs">
+                          <div className="grid grid-cols-2 gap-3 p-3 border border-green-400 rounded-border">
+                            <div>
+                              <div className="text-yellow-400 mb-1">Truth Index</div>
+                              <div className={`text-2xl font-bold ${
+                                (selectedStory.truthScore ?? 0) >= 70 ? 'text-green-400' :
+                                (selectedStory.truthScore ?? 0) >= 50 ? 'text-yellow-400' :
+                                'text-red-400'
+                              }`}>
+                                {selectedStory.truthScore ?? 0}%
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-yellow-400 mb-1">BIAS LEVEL</div>
+                              <div className={`text-2xl font-bold ${
+                                selectedStory.bias <= 20 ? 'text-green-400' :
+                                selectedStory.bias <= 40 ? 'text-yellow-400' :
+                                'text-red-400'
+                              }`}>
+                                {selectedStory.bias}%
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <div>
+                              <span className="text-yellow-400">LOCATION:</span> 
+                              <span className="text-green-400">{selectedStory.location.name}, {selectedStory.location.country}</span>
+                            </div>
+                            <div>
+                              <span className="text-yellow-400">SOURCES:</span> 
+                              <span className="text-green-400">{selectedStory.sources} aggregated</span>
+                            </div>
+                            <div>
+                              <span className="text-yellow-400">RELIABILITY:</span> 
+                              <span className="text-green-400">{ModernProgressBar({ value: selectedStory.reliability, width: 15 })}</span>
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-3 border-t border-green-400">
+                            <div className="text-yellow-400 mb-2">◉ ABSTRACTED CONTENT:</div>
+                            <div className="text-gray-300 bg-black p-3 border-l-4 border-pink-400 rounded-border">
+                              {selectedStory.abstractedContent ?? 'N/A'}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-3 mt-3">
+                            <div>
+                              <div className="text-red-400 mb-1">◉ BIASED CLAIMS:</div>
+                              <div className="space-y-1">
+                                {selectedStory.biasedClaims?.map((claim, i) => (
+                                  <div key={i} className="text-red-300 pl-2">× {claim}</div>
+                                )) ?? <div className="text-red-300 pl-2">None</div>}
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-green-400 mb-1">◉ VERIFIED FACTS:</div>
+                              <div className="space-y-1">
+                                {selectedStory.verifiedFacts?.map((fact, i) => (
+                                  <div key={i} className="text-green-300 pl-2">✓ {fact}</div>
+                                )) ?? <div className="text-green-300 pl-2">None</div>}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-3">
+                            <div className="text-yellow-400 mb-1">◉ KEY ENTITIES:</div>
+                            <div className="flex flex-wrap gap-1">
+                              {selectedStory.keyPlayers.map(player => (
+                                <span key={player} className="border border-green-400 px-2 py-1 text-green-400 rounded-border">
+                                  {player}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {selectedStory.connections && selectedStory.connections.length > 0 && (
+                            <div className="mt-3 pt-3 border-t border-green-400">
+                              <div className="text-yellow-400 mb-1">◉ NARRATIVE CONNECTIONS:</div>
+                              {selectedStory.connections.map(connId => {
+                                const conn = stories.find(s => s.id === connId);
+                                return conn ? (
+                                  <div key={connId} className="text-gray-300 pl-2">
+                                    → {conn.title} <span className="text-green-400">({conn.truthScore ?? 0}% truth)</span>
+                                  </div>
+                                ) : null;
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="mt-6 border border-green-400 p-3 rounded-border border-glow-green text-xs sm:text-sm">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
-                <div className="flex flex-wrap gap-4 items-center">
-                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>SYSTEM:</span>  TRUTHGUARD v0.0.1</div>
-                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>MODE:</span>  ACTIVE</div>
-                  <div className="flex items-center gap-1"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>UPTIME:</span> 99.97%</div>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-10 p-3 text-xs sm:text-sm gap-6">
+              {/* Left Column: SYSTEM Info */}
+              <div className="flex flex-col gap-2 text-green-400">
+                <div className="flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
+                  <span className="text-yellow-400">SYSTEM:</span> TRUTHGUARD v0.0.1
                 </div>
-                <div className="text-green-400 pulse ml-auto">█</div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
+                  <span className="text-yellow-400">MODE:</span> ACTIVE
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
+                  <span className="text-yellow-400">UPTIME:</span> 99.97%
+                </div>
+              </div>
+
+              {/* Right Grid: Stats */}
+              <div className="flex justify-around flex-1 w-full text-sm sm:text-md">
+                <div className="text-center p-3">
+                  <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>
+                  <div className="text-yellow-400">SOURCES</div>
+                </div>
+                <div className="text-center p-3">
+                  <div className="text-2xl font-bold text-green-400">{globalStats.avgTruthScore}%</div>
+                  <div className="text-yellow-400">AVG TRUTH INDEX</div>
+                </div>
+                <div className="text-center p-3">
+                  <div className="text-2xl font-bold text-red-400">{globalStats.criticalBias}</div>
+                  <div className="text-yellow-400">CRITICAL BIAS</div>
+                </div>
+                <div className="text-center p-3">
+                  <div className="text-2xl font-bold text-green-400">{globalStats.activeRegions}</div>
+                  <div className="text-yellow-400">REGIONS</div>
+                </div>
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs sm:text-sm">
-              <div className="text-center p-3 border border-green-400 rounded-border">
-                <div className="text-yellow-400">SOURCES</div>
-                <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>
-              </div>
-              <div className="text-center p-3 border border-green-400 rounded-border">
-                <div className="text-yellow-400">AVG TRUTH INDEX</div>
-                <div className="text-2xl font-bold text-green-400">{globalStats.avgTruthScore}%</div>
-              </div>
-              <div className="text-center p-3 border border-green-400 rounded-border">
-                <div className="text-yellow-400">CRITICAL BIAS</div>
-                <div className="text-2xl font-bold text-red-400">{globalStats.criticalBias}</div>
-              </div>
-              <div className="text-center p-3 border border-green-400 rounded-border">
-                <div className="text-yellow-400">REGIONS</div>
-                <div className="text-2xl font-bold text-green-400">{globalStats.activeRegions}</div>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
