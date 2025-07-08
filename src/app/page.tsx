@@ -475,7 +475,7 @@ export default function TruthGuardASCII() {
 
     globeRef.current = new ASCIIGlobe(80, 40);
 
-    addTerminalLine('█ DBNKD SYSTEM INITIALIZED');
+    addTerminalLine('█ TRUTHGUARD SYSTEM INITIALIZED');
     addTerminalLine(`├─ Connected to ${stats.activeRegions} regions`);
     addTerminalLine(`├─ Monitoring ${stats.totalSources} sources`);
     addTerminalLine(`├─ Global truth index average: ${stats.avgTruthScore}%`);
@@ -546,7 +546,7 @@ export default function TruthGuardASCII() {
 
   const clearTerminal = () => {
     setTerminalOutput([
-      '█ DBNKD TERMINAL v0.0.1',
+      '█ TRUTHGUARD TERMINAL v0.0.1',
     ]);
   };
 
@@ -745,19 +745,21 @@ export default function TruthGuardASCII() {
       <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6 overflow-hidden">
         <div className="mx-auto max-w-screen-xl">
           <div className="mb-6 border border-green-400 p-4 sm:p-6 rounded-border border-glow-green">
-            <div className="text-center mb-6 overflow-x-auto">
-              <pre className="text-green-400 inline-block text-[10px] xs:text-[9px] sm:text-xs md:text-sm leading-none whitespace-pre max-w-full break-words">
+            <div className="text-center mb-6 overflow-x-hidden max-w-screen">
+              <pre className="text-green-400 block text-[8px] sm:text-[8px] md:text-xs leading-none whitespace-pre break-words">
   {`
-     ██████╗ ██████╗ ███╗   ██╗██╗  ██╗██████╗      
-     ██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝██╔══██╗     
-     ██║  ██║██████╔╝██╔██╗ ██║█████╔╝ ██║  ██║     
-     ██║  ██║██╔══██╗██║╚██╗██║██╔═██╗ ██║  ██║     
-     ██████╔╝██████╔╝██║ ╚████║██║  ██╗██████╔╝     
-     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═════╝      
-                                                    
-                                                    
-    GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION     
-            █ v0.0.1 - Development Build            `}
+████████╗██████╗ ██╗   ██╗████████╗██╗  ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ 
+╚══██╔══╝██╔══██╗██║   ██║╚══██╔══╝██║  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗
+   ██║   ██████╔╝██║   ██║   ██║   ███████║██║  ███╗██║   ██║███████║██████╔╝██║  ██║
+   ██║   ██╔══██╗██║   ██║   ██║   ██╔══██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║
+   ██║   ██║  ██║╚██████╔╝   ██║   ██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝
+   ╚═╝   ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
+                                                                                     `}
+              </pre>
+              <pre className='block text-[12px] sm:text-[16px] md:text-sm leading-none whitespace-pre break-words'>
+                {`
+GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
+█ v0.0.1 - Development Build`}
               </pre>
             </div>
 
@@ -1029,7 +1031,7 @@ export default function TruthGuardASCII() {
             <div className="mt-6 border border-green-400 p-3 rounded-border border-glow-green text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
                 <div className="flex flex-wrap gap-4 items-center">
-                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>SYSTEM:</span>  DBNKD v0.0.1</div>
+                  <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>SYSTEM:</span>  TRUTHGUARD v0.0.1</div>
                   <div className="flex items-center gap-1 text-green-400"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>MODE:</span>  ACTIVE</div>
                   <div className="flex items-center gap-1"><span className="inline-block w-2 h-2 bg-green-400"></span><span className='text-yellow-400'>UPTIME:</span> 99.97%</div>
                 </div>
