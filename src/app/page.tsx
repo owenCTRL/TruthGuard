@@ -956,7 +956,7 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                             })()}
                             
                             {/* Current Story */}
-                            <div className="text-xs text-green-400 font-bold mt-4 truncate">
+                            <div className="text-[0.8rem] sm:text-xs text-green-400 font-bold">
                               {selectedStory.title}
                             </div>
                             
@@ -993,7 +993,7 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                       {isProcessing ? (
                         <div className="text-center py-8">
                           <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
-                          <div className="block text-green-400 text-[5px]">
+                          <div className="block text-green-400 text-[5px] w-full ">
                             <pre>
 {String.raw`
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
