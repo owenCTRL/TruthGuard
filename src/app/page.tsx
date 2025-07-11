@@ -221,244 +221,243 @@ export default function TruthGuardASCII() {
 
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono p-4">
-      <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6 overflow-hidden">
+      <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 overflow-hidden">
         <div className="mx-auto max-w-screen">
-          <div className="p-4 sm:p-6">
-            <div className="text-center mb-6 min-h-auto overflow-y-hidden overflow-x-hidden max-w-screen">
-              <pre className="text-green-400 block text-[4px] sm:text-[8px] md:text-xs leading-none whitespace-pre break-words">
-  {`
+          <div className="text-center mb-6 min-h-auto overflow-y-hidden overflow-x-hidden max-w-screen">
+            <pre className="text-green-400 block text-[4px] sm:text-[8px] md:text-xs leading-none whitespace-pre break-words">
+{`
 ████████╗██████╗ ██╗   ██╗████████╗██╗  ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ 
 ╚══██╔══╝██╔══██╗██║   ██║╚══██╔══╝██║  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗
-   ██║   ██████╔╝██║   ██║   ██║   ███████║██║  ███╗██║   ██║███████║██████╔╝██║  ██║
-   ██║   ██╔══██╗██║   ██║   ██║   ██╔══██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║
-   ██║   ██║  ██║╚██████╔╝   ██║   ██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
-                                                                                     `}
-              </pre>
-              <pre className='block text-[10px] sm:text-sm md:text-[16px] leading-none whitespace-pre break-words'>
-                {`
+  ██║   ██████╔╝██║   ██║   ██║   ███████║██║  ███╗██║   ██║███████║██████╔╝██║  ██║
+  ██║   ██╔══██╗██║   ██║   ██║   ██╔══██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║
+  ██║   ██║  ██║╚██████╔╝   ██║   ██║  ██║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝
+  ╚═╝   ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
+                                                                                    `}
+            </pre>
+            <pre className='block text-[10px] sm:text-sm md:text-[16px] leading-none whitespace-pre break-words'>
+              {`
 GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
 █ v0.0.1 - Development Build`}
-              </pre>
-            </div>
+            </pre>
+          </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-2">
-                <div className="border border-green-400 p-4 h-[550px] relative rounded-border border-glow-green"
-                    onMouseEnter={() => setIsMouseOverGlobe(true)}
-                    onMouseLeave={() => setIsMouseOverGlobe(false)}>
-                  <div className="absolute top-2 left-2 text-xs text-yellow-400 z-10">
-                    ◉ GLOBAL NETWORK
-                  </div>
-
-                  <div className="absolute top-2 right-2 text-xs text-green-400 z-10 flex items-center gap-2">
-                    <div className="flex gap-1">
-                      <button onClick={handleZoomOut} className="zoom-button rounded-border">−</button>
-                      <button onClick={handleZoomIn} className="zoom-button rounded-border">+</button>
-                    </div>
-                  </div>
-
-                  <div
-                    className="h-full flex items-center justify-center cursor-move select-none"
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
-                  >
-                    <pre className="text-green-400 text-[10px] leading-none">{renderGlobe()}</pre>
-                  </div>
-
-                  <div className="absolute bottom-2 left-2 text-xs space-y-1 invisible md:visible">
-                    <div className="text-yellow-400">◉ LEGEND</div>
-                    <div className="grid grid-cols-3 gap-2 text-[10px] text-green-400">
-                      <div>▓█ Land</div>
-                      <div>~≈ Ocean</div>
-                      <div>▲ Mountains</div>
-                      <div>= Equator</div>
-                      <div>| Prime Meridian</div>
-                      <div>· Grid Lines</div>
-                    </div>
-                    <div className="text-yellow-400 mt-2">◉ ACTIVE REGIONS</div>
-                    <div className="grid grid-cols-2 gap-2 text-[10px] text-green-400">
-                      <div>North America: {stories.filter(s => s.location.lng > -170 && s.location.lng < -50).length}</div>
-                      <div>Europe: {stories.filter(s => s.location.lng > -25 && s.location.lng < 40).length}</div>
-                      <div>Asia: {stories.filter(s => s.location.lng > 40 && s.location.lng < 180).length}</div>
-                      <div>Critical: <span className="text-red-400">{stories.filter(s => s.severity === 'CRITICAL').length}</span></div>
-                    </div>
-                  </div>
-
-                  <div className="absolute bottom-2 right-2 text-xs text-green-400">
-                    <div>CONNECTIONS: {stories.reduce((acc, s) => acc + (s.connections?.length || 0), 0)}</div>
-                    <div>ROTATION: {Math.round(globeRotation)}°</div>
-                    <div>ZOOM: {Math.round(globeZoom * 100)}%</div>
-                  </div>
-
-                  {(hoveredStory || selectedStory) && (
-                    <div className="absolute top-12 left-2 bg-black border border-green-400 p-2 rounded-border text-xs max-w-xs">
-                      <div className="text-yellow-400 font-bold mb-1">
-                        {(hoveredStory || selectedStory)?.location?.name ?? ''}
-                      </div>
-                      <div className="text-green-400">
-                        Category: {(hoveredStory || selectedStory)?.category ?? ''}
-                      </div>
-                      <div className="text-green-400">
-                        Sources: {(hoveredStory || selectedStory)?.sources ?? ''}
-                      </div>
-                      <div className="text-green-400">
-                        Truth: {(hoveredStory || selectedStory)?.truthScore ?? ''}%
-                      </div>
-                    </div>
-                  )}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
+              <div className="border border-green-400 p-4 h-[550px] relative rounded-border border-glow-green"
+                  onMouseEnter={() => setIsMouseOverGlobe(true)}
+                  onMouseLeave={() => setIsMouseOverGlobe(false)}>
+                <div className="absolute top-2 left-2 text-xs text-yellow-400 z-10">
+                  ◉ GLOBAL NETWORK
                 </div>
 
-                <div className={`border border-green-400 p-4 ${getTerminalHeight()} mt-4 overflow-y-auto rounded-border border-glow-green terminal-font max-h-[400px] md:max-h-[500px]`} ref={terminalRef}>
-                  <div className="text-xs space-y-1 text-green-400">
-                    {terminalOutput.map((line, index) => (
-                      <div key={index} className="font-light">{line}</div>
-                    ))}
-                    {isProcessing && (
-                      <div className="mt-2">
-                        <div>{ModernProgressBar({ value: scanProgress, width: 40 })}</div>
-                      </div>
-                    )}
-                    <span className="blink">█</span>
+                <div className="absolute top-2 right-2 text-xs text-green-400 z-10 flex items-center gap-2">
+                  <div className="flex gap-1">
+                    <button onClick={handleZoomOut} className="zoom-button rounded-border">−</button>
+                    <button onClick={handleZoomIn} className="zoom-button rounded-border">+</button>
                   </div>
                 </div>
+
+                <div
+                  className="h-full flex items-center justify-center cursor-move select-none"
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                >
+                  <pre className="text-green-400 text-[10px] leading-none">{renderGlobe()}</pre>
+                </div>
+
+                <div className="absolute bottom-2 left-2 text-xs space-y-1 invisible md:visible">
+                  <div className="text-yellow-400">◉ LEGEND</div>
+                  <div className="grid grid-cols-3 gap-2 text-[10px] text-green-400">
+                    <div>▓█ Land</div>
+                    <div>~≈ Ocean</div>
+                    <div>▲ Mountains</div>
+                    <div>= Equator</div>
+                    <div>| Prime Meridian</div>
+                    <div>· Grid Lines</div>
+                  </div>
+                  <div className="text-yellow-400 mt-2">◉ ACTIVE REGIONS</div>
+                  <div className="grid grid-cols-2 gap-2 text-[10px] text-green-400">
+                    <div>North America: {stories.filter(s => s.location.lng > -170 && s.location.lng < -50).length}</div>
+                    <div>Europe: {stories.filter(s => s.location.lng > -25 && s.location.lng < 40).length}</div>
+                    <div>Asia: {stories.filter(s => s.location.lng > 40 && s.location.lng < 180).length}</div>
+                    <div>Critical: <span className="text-red-400">{stories.filter(s => s.severity === 'CRITICAL').length}</span></div>
+                  </div>
+                </div>
+
+                <div className="absolute bottom-2 right-2 text-xs text-green-400">
+                  <div>CONNECTIONS: {stories.reduce((acc, s) => acc + (s.connections?.length || 0), 0)}</div>
+                  <div>ROTATION: {Math.round(globeRotation)}°</div>
+                  <div>ZOOM: {Math.round(globeZoom * 100)}%</div>
+                </div>
+
+                {(hoveredStory || selectedStory) && (
+                  <div className="absolute top-12 left-2 bg-black border border-green-400 p-2 rounded-border text-xs max-w-xs">
+                    <div className="text-yellow-400 font-bold mb-1">
+                      {(hoveredStory || selectedStory)?.location?.name ?? ''}
+                    </div>
+                    <div className="text-green-400">
+                      Category: {(hoveredStory || selectedStory)?.category ?? ''}
+                    </div>
+                    <div className="text-green-400">
+                      Sources: {(hoveredStory || selectedStory)?.sources ?? ''}
+                    </div>
+                    <div className="text-green-400">
+                      Truth: {(hoveredStory || selectedStory)?.truthScore ?? ''}%
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className="flex flex-col h-full space-y-4">
-                {!selectedStory ? (
-                  // Full height detected narratives when no story is selected
-                  <div className="border border-green-400 p-4 h-full overflow-y-auto rounded-border border-glow-green">
-                    <div className="text-sm mb-3 text-yellow-400 flex items-center justify-between">
-                      <span>◉ DETECTED NARRATIVES</span>
-                      <span className="text-xs text-green-400 pulse">LIVE</span>
+              <div className={`border border-green-400 p-4 ${getTerminalHeight()} mt-4 overflow-y-auto rounded-border border-glow-green terminal-font max-h-[400px] md:max-h-[500px]`} ref={terminalRef}>
+                <div className="text-xs space-y-1 text-green-400">
+                  {terminalOutput.map((line, index) => (
+                    <div key={index} className="font-light">{line}</div>
+                  ))}
+                  {isProcessing && (
+                    <div className="mt-2">
+                      <div>{ModernProgressBar({ value: scanProgress, width: 40 })}</div>
                     </div>
-                    <div className="space-y-2">
-                      {stories.map((story) => (
-                        <div
-                          key={story.id}
-                          className="border p-4 cursor-pointer transition-all duration-500 overflow-y-auto border-green-500 rounded-border border-glow-green border-green-400 hover:story-card-hover"
-                          onClick={() => analyzeStory(story)}
-                          onMouseEnter={() => setHoveredStory(story)}
-                          onMouseLeave={() => setHoveredStory(null)}
-                        >
-                          <div className="flex justify-between items-start mb-2">
-                            <div className="flex items-center gap-2">
-                              <span className={`text-lg ${
-                                story.category === 'DEFENSE' ? 'text-red-400' :
-                                story.category === 'ECONOMICS' ? 'text-green-400' :
-                                story.category === 'CYBER' ? 'text-purple-400' :
-                                story.category === 'ENERGY' ? 'text-yellow-400' :
-                                'text-white'
-                              }`}>
-                                {getMarkerSymbol(story.category, story.severity)}
-                              </span>
-                              <span className="text-xs font-bold text-green-400">{story.category}</span>
-                            </div>
-                            <span className={`text-xs ${
-                              story.severity === 'CRITICAL' ? 'text-red-400 pulse' : 
-                              story.severity === 'HIGH' ? 'text-yellow-400' :
-                              'text-green-400'
-                            }`}>
-                              {story.severity}
-                            </span>
-                          </div>
-                          <div className="text-xs mb-2 text-gray-300">{story.title}</div>
-                          <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div>
-                              <span className="text-yellow-400">Reliability:</span>
-                              <div className="text-green-400">
-                                {ModernProgressBar({ value: story.truthScore || 0, width: 10, showPercentage: false })} {story.truthScore ?? 0}%
-                              </div>
-                            </div>
-                            <div>
-                              <span className="text-yellow-400">BIAS:</span>
-                              <div className={story.bias > 30 ? 'text-red-400' : 'text-yellow-400'}>
-                                {ModernProgressBar({ value: story.bias, width: 10, showPercentage: false })} {story.bias}%
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-2 text-xs text-gray-400">
-                            {story.sources} sources • {story.location.name}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                  )}
+                  <span className="blink">█</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col h-full space-y-4">
+              {!selectedStory ? (
+                // Full height detected narratives when no story is selected
+                <div className="border border-green-400 p-4 h-full overflow-y-auto rounded-border border-glow-green">
+                  <div className="text-sm mb-3 text-yellow-400 flex items-center justify-between">
+                    <span>◉ DETECTED NARRATIVES</span>
+                    <span className="text-xs text-green-400 pulse">LIVE</span>
                   </div>
-                ) : (
-                  // Story detail view with navigation
-                  <div className="flex flex-col h-full">
-                    {/* Story Navigation Header */}
-                    <div className="border border-green-400 p-3 rounded-border border-glow-green mb-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => {
-                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
-                              const prevIndex = currentIndex > 0 ? currentIndex - 1 : stories.length - 1;
-                              analyzeStory(stories[prevIndex]);
-                            }}
-                            className="text-green-400 hover:text-yellow-400 transition-colors text-xl"
-                          >
-                            ↑
-                          </button>
-                          <div className="text-center">
-                            <div className="text-xs text-yellow-400">
-                              {stories.findIndex(s => s.id === selectedStory.id) + 1} of {stories.length}
-                            </div>
-                            <div className="text-xs text-gray-400">NARRATIVES</div>
+                  <div className="space-y-2">
+                    {stories.map((story) => (
+                      <div
+                        key={story.id}
+                        className="border p-4 cursor-pointer transition-all duration-500 overflow-y-auto border-green-500 rounded-border border-glow-green border-green-400 hover:story-card-hover"
+                        onClick={() => analyzeStory(story)}
+                        onMouseEnter={() => setHoveredStory(story)}
+                        onMouseLeave={() => setHoveredStory(null)}
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-lg ${
+                              story.category === 'DEFENSE' ? 'text-red-400' :
+                              story.category === 'ECONOMICS' ? 'text-green-400' :
+                              story.category === 'CYBER' ? 'text-purple-400' :
+                              story.category === 'ENERGY' ? 'text-yellow-400' :
+                              'text-white'
+                            }`}>
+                              {getMarkerSymbol(story.category, story.severity)}
+                            </span>
+                            <span className="text-xs font-bold text-green-400">{story.category}</span>
                           </div>
-                          <button
-                            onClick={() => {
-                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
-                              const nextIndex = currentIndex < stories.length - 1 ? currentIndex + 1 : 0;
-                              analyzeStory(stories[nextIndex]);
-                            }}
-                            className="text-green-400 hover:text-yellow-400 transition-colors text-xl"
-                          >
-                            ↓
-                          </button>
+                          <span className={`text-xs ${
+                            story.severity === 'CRITICAL' ? 'text-red-400 pulse' : 
+                            story.severity === 'HIGH' ? 'text-yellow-400' :
+                            'text-green-400'
+                          }`}>
+                            {story.severity}
+                          </span>
                         </div>
-                        
-                        <div className="flex-1 mx-4">
-                          <div className="text-center relative">
-                            {(() => {
-                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
-                              const prevIndex = currentIndex > 0 ? currentIndex - 1 : stories.length - 1;
-                              const prevStory = stories[prevIndex];
-                              return (
-                                <div className="absolute top-0 left-0 w-full opacity-30 blur-sm text-xs text-gray-500 truncate">
-                                  {prevStory.title}
-                                </div>
-                              );
-                            })()}
-                            
-                            <div className="text-[0.8rem] sm:text-xs text-green-400 font-bold">
-                              {selectedStory.title}
+                        <div className="text-xs mb-2 text-gray-300">{story.title}</div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-yellow-400">Reliability:</span>
+                            <div className="text-green-400">
+                              {ModernProgressBar({ value: story.truthScore || 0, width: 10, showPercentage: false })} {story.truthScore ?? 0}%
                             </div>
                           </div>
+                          <div>
+                            <span className="text-yellow-400">BIAS:</span>
+                            <div className={story.bias > 30 ? 'text-red-400' : 'text-yellow-400'}>
+                              {ModernProgressBar({ value: story.bias, width: 10, showPercentage: false })} {story.bias}%
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-2 text-xs text-gray-400">
+                          {story.sources} sources • {story.location.name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                // Story detail view with navigation
+                <div className="flex flex-col h-full">
+                  {/* Story Navigation Header */}
+                  <div className="border border-green-400 p-3 rounded-border border-glow-green mb-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => {
+                            const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
+                            const prevIndex = currentIndex > 0 ? currentIndex - 1 : stories.length - 1;
+                            analyzeStory(stories[prevIndex]);
+                          }}
+                          className="text-green-400 hover:text-yellow-400 transition-colors text-xl"
+                        >
+                          ↑
+                        </button>
+                        <div className="text-center">
+                          <div className="text-xs text-yellow-400">
+                            {stories.findIndex(s => s.id === selectedStory.id) + 1} of {stories.length}
+                          </div>
+                          <div className="text-xs text-gray-400">NARRATIVES</div>
                         </div>
                         <button
                           onClick={() => {
-                            setSelectedStory(null);
-                            setIsProcessing(false);
+                            const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
+                            const nextIndex = currentIndex < stories.length - 1 ? currentIndex + 1 : 0;
+                            analyzeStory(stories[nextIndex]);
                           }}
-                          className="text-red-400 hover:text-red-300 transition-colors text-xl font-bold"
+                          className="text-green-400 hover:text-yellow-400 transition-colors text-xl"
                         >
-                          ×
+                          ↓
                         </button>
                       </div>
+                      
+                      <div className="flex-1 mx-4">
+                        <div className="text-center relative">
+                          {(() => {
+                            const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
+                            const prevIndex = currentIndex > 0 ? currentIndex - 1 : stories.length - 1;
+                            const prevStory = stories[prevIndex];
+                            return (
+                              <div className="absolute top-0 left-0 w-full opacity-30 blur-sm text-xs text-gray-500 truncate">
+                                {prevStory.title}
+                              </div>
+                            );
+                          })()}
+                          
+                          <div className="text-[0.8rem] sm:text-xs text-green-400 font-bold">
+                            {selectedStory.title}
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setSelectedStory(null);
+                          setIsProcessing(false);
+                        }}
+                        className="text-red-400 hover:text-red-300 transition-colors text-xl font-bold"
+                      >
+                        ×
+                      </button>
                     </div>
+                  </div>
 
-                    <div className="border border-green-400 p-4 rounded-border border-glow-green flex-1 overflow-y-auto">
-                      <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
+                  <div className="border border-green-400 p-4 rounded-border border-glow-green flex-1 overflow-y-auto">
+                    <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
 
-                      {isProcessing ? (
-                        <div className="text-center py-8">
-                          <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
-                          <div className="block text-green-400 text-[5px] w-full ">
-                            <pre className='text-[5px]'>
+                    {isProcessing ? (
+                      <div className="text-center py-8">
+                        <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
+                        <div className="block text-green-400 text-[5px] w-full ">
+                          <pre className='text-[5px]'>
 {String.raw`
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
@@ -543,140 +542,139 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNNNNFFFV
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 `}
-                            </pre>
+                          </pre>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 text-xs">
+                        <div className="grid grid-cols-2 gap-3 p-3 border border-green-400 rounded-border">
+                          <div>
+                            <div className="text-yellow-400 mb-1">Truth Index</div>
+                            <div className={`text-2xl font-bold ${
+                              (selectedStory.truthScore ?? 0) >= 70 ? 'text-green-400' :
+                              (selectedStory.truthScore ?? 0) >= 50 ? 'text-yellow-400' :
+                              'text-red-400'
+                            }`}>
+                              {selectedStory.truthScore ?? 0}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-yellow-400 mb-1">BIAS LEVEL</div>
+                            <div className={`text-2xl font-bold ${
+                              selectedStory.bias <= 20 ? 'text-green-400' :
+                              selectedStory.bias <= 40 ? 'text-yellow-400' :
+                              'text-red-400'
+                            }`}>
+                              {selectedStory.bias}%
+                            </div>
                           </div>
                         </div>
-                      ) : (
-                        <div className="space-y-3 text-xs">
-                          <div className="grid grid-cols-2 gap-3 p-3 border border-green-400 rounded-border">
-                            <div>
-                              <div className="text-yellow-400 mb-1">Truth Index</div>
-                              <div className={`text-2xl font-bold ${
-                                (selectedStory.truthScore ?? 0) >= 70 ? 'text-green-400' :
-                                (selectedStory.truthScore ?? 0) >= 50 ? 'text-yellow-400' :
-                                'text-red-400'
-                              }`}>
-                                {selectedStory.truthScore ?? 0}%
-                              </div>
-                            </div>
-                            <div>
-                              <div className="text-yellow-400 mb-1">BIAS LEVEL</div>
-                              <div className={`text-2xl font-bold ${
-                                selectedStory.bias <= 20 ? 'text-green-400' :
-                                selectedStory.bias <= 40 ? 'text-yellow-400' :
-                                'text-red-400'
-                              }`}>
-                                {selectedStory.bias}%
-                              </div>
+
+                        <div className="space-y-1">
+                          <div>
+                            <span className="text-yellow-400">LOCATION:</span> 
+                            <span className="text-green-400">{selectedStory.location.name}, {selectedStory.location.country}</span>
+                          </div>
+                          <div>
+                            <span className="text-yellow-400">SOURCES:</span> 
+                            <span className="text-green-400">{selectedStory.sources} aggregated</span>
+                          </div>
+                          <div>
+                            <span className="text-yellow-400">RELIABILITY:</span> 
+                            <span className="text-green-400">{ModernProgressBar({ value: selectedStory.reliability, width: 15 })}</span>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 pt-3 border-t border-green-400">
+                          <div className="text-yellow-400 mb-2">◉ ABSTRACTED CONTENT:</div>
+                          <div className="text-gray-300 bg-black p-3 border-l-4 border-pink-400 rounded-border">
+                            {selectedStory.abstractedContent ?? 'N/A'}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-3 mt-3">
+                          <div>
+                            <div className="text-red-400 mb-1">◉ BIASED CLAIMS:</div>
+                            <div className="space-y-1">
+                              {selectedStory.biasedClaims?.map((claim, i) => (
+                                <div key={i} className="text-red-300 pl-2">× {claim}</div>
+                              )) ?? <div className="text-red-300 pl-2">None</div>}
                             </div>
                           </div>
-
-                          <div className="space-y-1">
-                            <div>
-                              <span className="text-yellow-400">LOCATION:</span> 
-                              <span className="text-green-400">{selectedStory.location.name}, {selectedStory.location.country}</span>
-                            </div>
-                            <div>
-                              <span className="text-yellow-400">SOURCES:</span> 
-                              <span className="text-green-400">{selectedStory.sources} aggregated</span>
-                            </div>
-                            <div>
-                              <span className="text-yellow-400">RELIABILITY:</span> 
-                              <span className="text-green-400">{ModernProgressBar({ value: selectedStory.reliability, width: 15 })}</span>
+                          <div>
+                            <div className="text-green-400 mb-1">◉ VERIFIED FACTS:</div>
+                            <div className="space-y-1">
+                              {selectedStory.verifiedFacts?.map((fact, i) => (
+                                <div key={i} className="text-green-300 pl-2">✓ {fact}</div>
+                              )) ?? <div className="text-green-300 pl-2">None</div>}
                             </div>
                           </div>
+                        </div>
 
+                        <div className="mt-3">
+                          <div className="text-yellow-400 mb-1">◉ KEY ENTITIES:</div>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedStory.keyPlayers.map(player => (
+                              <span key={player} className="border border-green-400 px-2 py-1 text-green-400 rounded-border">
+                                {player}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {selectedStory.connections && selectedStory.connections.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-green-400">
-                            <div className="text-yellow-400 mb-2">◉ ABSTRACTED CONTENT:</div>
-                            <div className="text-gray-300 bg-black p-3 border-l-4 border-pink-400 rounded-border">
-                              {selectedStory.abstractedContent ?? 'N/A'}
-                            </div>
+                            <div className="text-yellow-400 mb-1">◉ NARRATIVE CONNECTIONS:</div>
+                            {selectedStory.connections.map(connId => {
+                              const conn = stories.find(s => s.id === connId);
+                              return conn ? (
+                                <div key={connId} className="text-gray-300 pl-2">
+                                  → {conn.title} <span className="text-green-400">({conn.truthScore ?? 0}% truth)</span>
+                                </div>
+                              ) : null;
+                            })}
                           </div>
-
-                          <div className="grid grid-cols-1 gap-3 mt-3">
-                            <div>
-                              <div className="text-red-400 mb-1">◉ BIASED CLAIMS:</div>
-                              <div className="space-y-1">
-                                {selectedStory.biasedClaims?.map((claim, i) => (
-                                  <div key={i} className="text-red-300 pl-2">× {claim}</div>
-                                )) ?? <div className="text-red-300 pl-2">None</div>}
-                              </div>
-                            </div>
-                            <div>
-                              <div className="text-green-400 mb-1">◉ VERIFIED FACTS:</div>
-                              <div className="space-y-1">
-                                {selectedStory.verifiedFacts?.map((fact, i) => (
-                                  <div key={i} className="text-green-300 pl-2">✓ {fact}</div>
-                                )) ?? <div className="text-green-300 pl-2">None</div>}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="mt-3">
-                            <div className="text-yellow-400 mb-1">◉ KEY ENTITIES:</div>
-                            <div className="flex flex-wrap gap-1">
-                              {selectedStory.keyPlayers.map(player => (
-                                <span key={player} className="border border-green-400 px-2 py-1 text-green-400 rounded-border">
-                                  {player}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
-                          {selectedStory.connections && selectedStory.connections.length > 0 && (
-                            <div className="mt-3 pt-3 border-t border-green-400">
-                              <div className="text-yellow-400 mb-1">◉ NARRATIVE CONNECTIONS:</div>
-                              {selectedStory.connections.map(connId => {
-                                const conn = stories.find(s => s.id === connId);
-                                return conn ? (
-                                  <div key={connId} className="text-gray-300 pl-2">
-                                    → {conn.title} <span className="text-green-400">({conn.truthScore ?? 0}% truth)</span>
-                                  </div>
-                                ) : null;
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-10 p-3 text-xs sm:text-sm gap-6">
+            <div className="flex flex-col gap-2 text-green-400">
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
+                <span className="text-yellow-400">SYSTEM:</span> TRUTHGUARD v0.0.1
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
+                <span className="text-yellow-400">MODE:</span> ACTIVE
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
+                <span className="text-yellow-400">UPTIME:</span> 99.97%
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-10 p-3 text-xs sm:text-sm gap-6">
-              <div className="flex flex-col gap-2 text-green-400">
-                <div className="flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
-                  <span className="text-yellow-400">SYSTEM:</span> TRUTHGUARD v0.0.1
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
-                  <span className="text-yellow-400">MODE:</span> ACTIVE
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
-                  <span className="text-yellow-400">UPTIME:</span> 99.97%
-                </div>
+            <div className="flex justify-around flex-1 w-full text-sm sm:text-md">
+              <div className="text-center p-3">
+                <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>
+                <div className="text-yellow-400">SOURCES</div>
               </div>
-
-              <div className="flex justify-around flex-1 w-full text-sm sm:text-md">
-                <div className="text-center p-3">
-                  <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>
-                  <div className="text-yellow-400">SOURCES</div>
-                </div>
-                <div className="text-center p-3">
-                  <div className="text-2xl font-bold text-green-400">{globalStats.avgTruthScore}%</div>
-                  <div className="text-yellow-400">AVG TRUTH INDEX</div>
-                </div>
-                <div className="text-center p-3">
-                  <div className="text-2xl font-bold text-red-400">{globalStats.criticalBias}</div>
-                  <div className="text-yellow-400">CRITICAL BIAS</div>
-                </div>
-                <div className="text-center p-3">
-                  <div className="text-2xl font-bold text-green-400">{globalStats.activeRegions}</div>
-                  <div className="text-yellow-400">REGIONS</div>
-                </div>
+              <div className="text-center p-3">
+                <div className="text-2xl font-bold text-green-400">{globalStats.avgTruthScore}%</div>
+                <div className="text-yellow-400">AVG TRUTH INDEX</div>
+              </div>
+              <div className="text-center p-3">
+                <div className="text-2xl font-bold text-red-400">{globalStats.criticalBias}</div>
+                <div className="text-yellow-400">CRITICAL BIAS</div>
+              </div>
+              <div className="text-center p-3">
+                <div className="text-2xl font-bold text-green-400">{globalStats.activeRegions}</div>
+                <div className="text-yellow-400">REGIONS</div>
               </div>
             </div>
           </div>
