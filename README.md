@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<a name="readme-top"></a>
 
-## Getting Started
+<!-- SHIELDS -->
 
-First, run the development server:
+![Contributors][contributors-shield]
+![Stars][stars-shield]
+![Issues][issues-shield]
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<br />
+<p align="center">
+  <img src="public/assets/truthguard.png" alt="TruthGuard Logo" width="100" />
+</p>
+<h3 align="center">TruthGuard</h3>
+<p align="center">
+  <strong>Built by Clickroot</strong><br />
+  <em>Mission-Critical, By Design.</em>
+  <br /><br />
+  <code>TruthGuard is the signal filter for the post-truth era.</code>
+</p>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<br />
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛰 What is TruthGuard?
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**TruthGuard** is a mission-critical news verification system designed to extract reality from the noise.
 
-## Learn More
+It works like a human fact-checker—at machine scale. TruthGuard ingests multiple data sources, synthesizes a mean narrative, and evaluates the **truth level** and **abstracted facts** behind the story. The result is clarity in a time of chaos.
 
-To learn more about Next.js, take a look at the following resources:
+> News is not broken. It’s overloaded.
+> TruthGuard is your interpretive layer between *what’s said* and *what’s true*.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<br />
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧠 How It Works
 
-## Deploy on Vercel
+TruthGuard follows a deterministic, multi-stage process:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Ingest Sources**
+   Crawls headlines, bodies, and metadata from diverse outlets (APIs, RSS, etc.)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Generate Mean Story**
+   Identifies shared semantics and constructs a "consensus narrative"
+
+3. **Abstract Core Facts**
+   Extracts claims, actors, causes, and consequences
+
+4. **Truth Level Analysis**
+   Compares across-sources for consistency, bias deviation, factual conflicts
+
+5. **Output with Score**
+   Returns a structured summary with a confidence level, key facts, and source traceability
+
+<br />
+
+## 🔐 Why It Matters
+
+The modern information environment is saturated, synthetic, and often adversarial. TruthGuard is not a content filter — it's a **signal detector**.
+
+**Applications:**
+
+* Crisis response dashboards
+* Intelligence briefings
+* Journalistic vetting
+* Election monitoring
+* Disinformation mapping
+
+TruthGuard doesn’t tell you what to believe.
+It tells you **what was said**, **what’s consistent**, and **what holds up**.
+
+<br />
+
+## 🛡 Architecture Principles
+
+* 📏 **Deterministic Modeling** — Reproducible outputs from identical inputs
+* 🧮 **Mathematical Neutrality** — No political priors baked into the engine
+* 🧭 **Traceable Truth** — Every fact has a path
+
+When the truth is scattered, **TruthGuard assembles the map.**
+
+<br />
+
+## 📡 Contact & Follow
+
+TruthGuard is built by [Clickroot](https://x.com/clickroot), the software engineering initiative behind mission-ready tools.
+
+Follow us at [@Clickroot](https://x.com/clickroot)
+
+<br />
+
+<p align="center"><a href="#readme-top">⬆️ Back to Top</a></p>
+
+<!-- SHIELD LINK DEFINITIONS -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/owenCTRL/TruthGuard.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/owenCTRL/TruthGuard.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/owenCTRL/TruthGuard.svg?style=for-the-badge
