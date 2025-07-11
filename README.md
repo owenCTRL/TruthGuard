@@ -14,7 +14,9 @@
   <br /><br />
   <code>TruthGuard is the signal filter for the post-truth era.</code>
 </p>
-<img align="center" src="public/assets/truthguard_screenshot.png" alt="TruthGuard Demo" width="500" />
+<p align="center">
+  <img src="public/assets/truthguard_screenshot.png" alt="TruthGuard Demo" style="width:80%;" />
+</p>
 
 <br />
 
