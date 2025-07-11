@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
+import { Analytics } from "@vercel/analytics/next"
 
 // Story type definition
 interface Story {
@@ -1219,11 +1220,10 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
                 </div>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
