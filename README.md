@@ -19,8 +19,6 @@
   <img src="public/assets/truthguard_screenshot.png" alt="TruthGuard Demo" style="width:80%;" />
 </p>
 
-<br />
-
 ## 🛰 What is TruthGuard?
 
 **TruthGuard** is a mission-critical news verification system designed to extract reality from the noise.
