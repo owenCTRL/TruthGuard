@@ -13,6 +13,7 @@
   <em>Mission-Critical, By Design.</em>
   <br /><br />
   <code>TruthGuard is the signal filter for the post-truth era.</code>
+  <img src="public/assets/truthguard_screenshot.png" alt="TruthGuard Demo" width="300" />
 </p>
 
 <br />
