@@ -78,7 +78,7 @@ When the truth is scattered, **TruthGuard assembles the map.**
 
 ## 📡 Contact & Follow
 
-TruthGuard is built by [Clickroot](https://x.com/clickroot), the software engineering initiative behind mission-ready tools.
+TruthGuard is built by [Clickroot](https://x.com/clickroot).
 
 Follow us at [@Clickroot](https://x.com/clickroot)
 
