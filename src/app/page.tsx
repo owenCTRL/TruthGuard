@@ -1,12 +1,14 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
+import { ASCIIGlobe } from './components/asciiGlobe'; // Adjust the path based on your file structure
+import './globals.css';
 
 // Story type definition
 interface Story {
   id: string;
   title: string;
-  category: 'DEFENSE' | 'ECONOMICS' | 'CYBER' | 'ENERGY' | 'POLITICS';
+  category: 'US' | 'WORLD' | 'POLITICS' | 'BUSINESS' | 'HEALTH' | 'ENTERTAINMENT' | 'ECONOMICS' | 'CYBER' | 'ENERGY' | 'DEFENSE';
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   location: { lat: number; lng: number; name: string; country: string };
   reliability: number;
@@ -22,312 +24,6 @@ interface Story {
   abstractedContent?: string;
   biasedClaims?: string[];
   verifiedFacts?: string[];
-}
-
-// Enhanced Globe rendering class with better detail
-class ASCIIGlobe {
-  private canvas: string[][];
-  private width: number;
-  private height: number;
-  private radius: number;
-  private rotation: number = 0;
-  private tilt: number = 0.3;
-  private zoom: number = 1.0;
-  private autoRotate: boolean = true;
-  private characters = ' .·:+=#@█';
-
-  setRotation(rotation: number) {
-    this.rotation = rotation;
-  }
-
-  setAutoRotate(autoRotate: boolean) {
-    this.autoRotate = autoRotate;
-  }
-
-  getAutoRotate(): boolean {
-    return this.autoRotate;
-  }
-
-  setZoom(zoom: number) {
-    this.zoom = Math.max(0.8, Math.min(2.0, zoom));
-  }
-
-  getZoom(): number {
-    return this.zoom;
-  }
-
-  constructor(width: number, height: number) {
-    this.width = width;
-    this.height = height;
-    this.radius = Math.min(width, height) * 0.4;
-    this.canvas = Array(height).fill(null).map(() => Array(width).fill(' '));
-  }
-
-  private latLngTo3D(lat: number, lng: number, rotation: number): { x: number; y: number; z: number } {
-    const phi = (90 - lat) * Math.PI / 180;
-    const theta = (lng + rotation) * Math.PI / 180;
-
-    const x = this.radius * Math.sin(phi) * Math.cos(theta) * this.zoom;
-    const y = this.radius * Math.cos(phi) * this.zoom;
-    const z = this.radius * Math.sin(phi) * Math.sin(theta) * this.zoom;
-
-    const tiltedY = y * Math.cos(this.tilt) - z * Math.sin(this.tilt);
-    const tiltedZ = y * Math.sin(this.tilt) + z * Math.cos(this.tilt);
-
-    return { x, y: tiltedY, z: tiltedZ };
-  }
-
-  private project3DTo2D(x: number, y: number, z: number): { x: number; y: number; visible: boolean } {
-    const screenX = Math.round(x + this.width / 2);
-    const screenY = Math.round(-y + this.height / 2);
-    const visible = z > -this.radius * 0.8 * this.zoom;
-
-    return { x: screenX, y: screenY, visible };
-  }
-
-  clear() {
-    this.canvas = Array(this.height).fill(null).map(() => Array(this.width).fill(' '));
-  }
-
-  drawGlobe() {
-    // Draw the globe sphere with higher resolution
-    for (let lat = -90; lat <= 90; lat += 2) {
-      for (let lng = -180; lng <= 180; lng += 2) {
-        const { x, y, z } = this.latLngTo3D(lat, lng, this.rotation);
-        const { x: screenX, y: screenY, visible } = this.project3DTo2D(x, y, z);
-
-        if (visible && screenX >= 0 && screenX < this.width && screenY >= 0 && screenY < this.height) {
-          const brightness = Math.max(0, Math.min(1, (z + this.radius * this.zoom) / (2 * this.radius * this.zoom)));
-          
-          const isLand = this.isDetailedLandmass(lat, lng);
-          const isCoastline = this.isCoastline(lat, lng);
-          const elevation = this.getElevation(lat, lng);
-          
-          if (isCoastline) {
-            this.canvas[screenY][screenX] = brightness > 0.3 ? '≈' : '~';
-          } else if (isLand) {
-            if (elevation > 0.7) {
-              this.canvas[screenY][screenX] = brightness > 0.3 ? '▲' : '^';
-            } else if (elevation > 0.4) {
-              this.canvas[screenY][screenX] = brightness > 0.3 ? '█' : '▓';
-            } else {
-              this.canvas[screenY][screenX] = brightness > 0.3 ? '▓' : '░';
-            }
-          } else {
-            // Ocean with wave patterns
-            const wavePattern = (Math.sin(lat * 0.1 + lng * 0.1) > 0);
-            this.canvas[screenY][screenX] = brightness > 0.3 ? (wavePattern ? '~' : '≈') : '·';
-          }
-        }
-      }
-    }
-
-    // Draw latitude lines (more detailed)
-    for (let lat = -75; lat <= 75; lat += 15) {
-      for (let lng = -180; lng <= 180; lng += 1) {
-        const { x, y, z } = this.latLngTo3D(lat, lng, this.rotation);
-        const { x: screenX, y: screenY, visible } = this.project3DTo2D(x, y, z);
-
-        if (visible && screenX >= 0 && screenX < this.width && screenY >= 0 && screenY < this.height) {
-          if (this.canvas[screenY][screenX] === ' ' || this.canvas[screenY][screenX] === '·') {
-            this.canvas[screenY][screenX] = '·';
-          }
-        }
-      }
-    }
-
-    // Draw longitude lines (more detailed)
-    for (let lng = -180; lng <= 180; lng += 15) {
-      for (let lat = -90; lat <= 90; lat += 1) {
-        const { x, y, z } = this.latLngTo3D(lat, lng, this.rotation);
-        const { x: screenX, y: screenY, visible } = this.project3DTo2D(x, y, z);
-
-        if (visible && screenX >= 0 && screenX < this.width && screenY >= 0 && screenY < this.height) {
-          if (this.canvas[screenY][screenX] === ' ' || this.canvas[screenY][screenX] === '·') {
-            this.canvas[screenY][screenX] = '·';
-          }
-        }
-      }
-    }
-
-    // Draw equator and prime meridian
-    for (let i = -180; i <= 180; i += 1) {
-      // Equator
-      const { x, y, z } = this.latLngTo3D(0, i, this.rotation);
-      const { x: screenX, y: screenY, visible } = this.project3DTo2D(x, y, z);
-      if (visible && screenX >= 0 && screenX < this.width && screenY >= 0 && screenY < this.height) {
-        if (this.canvas[screenY][screenX] === ' ' || this.canvas[screenY][screenX] === '·') {
-          this.canvas[screenY][screenX] = '=';
-        }
-      }
-
-      // Prime meridian
-      const pm = this.latLngTo3D(i / 2, 0, this.rotation);
-      const pmScreen = this.project3DTo2D(pm.x, pm.y, pm.z);
-      if (pmScreen.visible && pmScreen.x >= 0 && pmScreen.x < this.width && pmScreen.y >= 0 && pmScreen.y < this.height) {
-        if (this.canvas[pmScreen.y][pmScreen.x] === ' ' || this.canvas[pmScreen.y][pmScreen.x] === '·') {
-          this.canvas[pmScreen.y][pmScreen.x] = '|';
-        }
-      }
-    }
-  }
-
-  // More detailed landmass detection with coastlines
-  private isDetailedLandmass(lat: number, lng: number): boolean {
-    // North America with more detail
-    if (lat > 15 && lat < 75 && lng > -170 && lng < -50) {
-      // Exclude Gulf of Mexico
-      if (lat < 30 && lat > 18 && lng > -98 && lng < -80) return false;
-      // Exclude Hudson Bay
-      if (lat > 50 && lat < 65 && lng > -95 && lng < -75) return false;
-      return true;
-    }
-    
-    // South America with detail
-    if (lat > -55 && lat < 15 && lng > -85 && lng < -35) {
-      // Narrow at Panama
-      if (lat > 5 && lat < 10 && lng < -80) return true;
-      if (lat > -5 && lat < 5 && lng > -70) return true;
-      return true;
-    }
-    
-    // Europe with Mediterranean
-    if (lat > 35 && lat < 72 && lng > -25 && lng < 60) {
-      // Mediterranean Sea
-      if (lat > 30 && lat < 45 && lng > -5 && lng < 35) {
-        if (lat < 38) return false;
-        if (lat < 42 && lng > 10 && lng < 30) return false;
-      }
-      return true;
-    }
-    
-    // Africa with detail
-    if (lat > -35 && lat < 38 && lng > -20 && lng < 55) {
-      // Red Sea
-      if (lat > 12 && lat < 30 && lng > 32 && lng < 44) return false;
-      return true;
-    }
-    
-    // Asia with detail
-    if (lat > -10 && lat < 75 && lng > 25 && lng < 180) {
-      // Exclude major water bodies
-      if (lat > 30 && lat < 50 && lng > 45 && lng < 60) return false; // Caspian Sea
-      return true;
-    }
-    
-    // Australia
-    if (lat > -45 && lat < -10 && lng > 110 && lng < 155) {
-      return true;
-    }
-    
-    // Indonesia
-    if (lat > -10 && lat < 10 && lng > 95 && lng < 140) {
-      if ((lng > 100 && lng < 110) || (lng > 115 && lng < 125) || (lng > 130 && lng < 135)) {
-        return true;
-      }
-    }
-    
-    // New Zealand
-    if (lat > -48 && lat < -34 && lng > 165 && lng < 179) {
-      return true;
-    }
-    
-    // Antarctica
-    if (lat < -60) {
-      return true;
-    }
-
-    return false;
-  }
-
-  private isCoastline(lat: number, lng: number): boolean {
-    if (!this.isDetailedLandmass(lat, lng)) return false;
-    
-    // Check if any neighbor is water
-    for (let dlat = -2; dlat <= 2; dlat += 2) {
-      for (let dlng = -2; dlng <= 2; dlng += 2) {
-        if (dlat === 0 && dlng === 0) continue;
-        if (!this.isDetailedLandmass(lat + dlat, lng + dlng)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private getElevation(lat: number, lng: number): number {
-    // Himalayas
-    if (lat > 25 && lat < 35 && lng > 75 && lng < 95) return 0.9;
-    // Alps
-    if (lat > 44 && lat < 48 && lng > 5 && lng < 15) return 0.8;
-    // Rockies
-    if (lat > 30 && lat < 50 && lng > -120 && lng < -100) return 0.7;
-    // Andes
-    if (lat > -55 && lat < 10 && lng > -75 && lng < -65) return 0.8;
-    
-    return 0.2;
-  }
-
-  drawMarker(lat: number, lng: number, symbol: string, highlight: boolean = false) {
-    const { x, y, z } = this.latLngTo3D(lat, lng, this.rotation);
-    const { x: screenX, y: screenY, visible } = this.project3DTo2D(x, y, z);
-
-    if (visible && screenX >= 0 && screenX < this.width && screenY >= 0 && screenY < this.height) {
-      this.canvas[screenY][screenX] = symbol;
-
-      if (highlight) {
-        // Draw a cross pattern for highlight
-        const positions = [
-          [-1, 0], [1, 0], [0, -1], [0, 1]
-        ];
-        
-        positions.forEach(([dx, dy]) => {
-          const nx = screenX + dx;
-          const ny = screenY + dy;
-          if (nx >= 0 && nx < this.width && ny >= 0 && ny < this.height) {
-            if (this.canvas[ny][nx] === ' ' || this.canvas[ny][nx] === '·' || this.canvas[ny][nx] === '~') {
-              this.canvas[ny][nx] = '+';
-            }
-          }
-        });
-      }
-    }
-
-    return { visible, screenX, screenY };
-  }
-
-  drawConnection(lat1: number, lng1: number, lat2: number, lng2: number) {
-    const steps = 30;
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      
-      // Great circle interpolation
-      const lat = lat1 + (lat2 - lat1) * t;
-      const lng = lng1 + (lng2 - lng1) * t;
-
-      const { x, y, z } = this.latLngTo3D(lat, lng, this.rotation);
-      const { x: screenX, y: screenY, visible } = this.project3DTo2D(x, y, z);
-
-      if (visible && screenX >= 0 && screenX < this.width && screenY >= 0 && screenY < this.height) {
-        const current = this.canvas[screenY][screenX];
-        if (current === ' ' || current === '·' || current === '~' || current === '≈') {
-          this.canvas[screenY][screenX] = i % 4 === 0 ? '◦' : '·';
-        }
-      }
-    }
-  }
-
-  rotate(delta: number) {
-    this.rotation = (this.rotation + delta) % 360;
-  }
-
-  setTilt(tilt: number) {
-    this.tilt = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, tilt));
-  }
-
-  toString(): string {
-    return this.canvas.map(row => row.join('')).join('\n');
-  }
 }
 
 const ModernProgressBar = ({ value, max = 100, width = 20, showPercentage = true }: { value: number; max?: number; width?: number; showPercentage?: boolean }) => {
@@ -641,106 +337,11 @@ export default function TruthGuardASCII() {
 
   const getTerminalHeight = () => {
     if (!selectedStory) return 'h-[calc(283px)]';
-    return 'h-[283px]'; // Start with this and adjust
+    return 'h-[283px]';
   };
 
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono p-4">
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&display=swap');
-
-        body {
-          font-family: 'Fira Code', monospace;
-          background: #000;
-          color: #00ff00;
-          margin: 0;
-          overflow-x: hidden;
-        }
-
-        ::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: #001100;
-          border: 1px solid #003300;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: rgba(0, 226, 119, 1);
-        }
-
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-
-        .pulse {
-          animation: pulse 2s infinite;
-        }
-
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
-        }
-
-        .blink {
-          animation: blink 1s infinite;
-        }
-
-        .terminal-font {
-          font-family: 'Fira Code', monospace;
-          font-weight: 400;
-        }
-
-        .rounded-border {
-          border-radius: 4px;
-        }
-
-        .border-glow-green {
-          box-shadow: 0 0 10px rgba(0, 255, 0, 0.1), inset 0 0 10px rgba(0, 255, 0, 0.02);
-        }
-
-        .border-glow-yellow {
-          box-shadow: 0 0 10px rgba(255, 255, 0, 0.1), inset 0 0 10px rgba(255, 255, 0, 0.02);
-        }
-
-        .border-glow-red {
-          box-shadow: 0 0 10px rgba(255, 0, 0, 0.1), inset 0 0 10px rgba(255, 0, 0, 0.02);
-        }
-
-        .story-card-hover {
-          background: rgba(0, 255, 0, 0.03);
-          border-color: rgba(0, 255, 0, 0.8);
-        }
-
-        .story-card-selected {
-          background: rgba(255, 255, 0, 0.05);
-          border-color: rgba(255, 255, 0, 0.8);
-        }
-
-        .zoom-button {
-          background: transparent;
-          border: 1px solid rgba(0, 226, 119, 1);
-          color: rgba(0, 226, 119, 1);
-          padding: 4px 8px;
-          cursor: pointer;
-          font-family: 'Fira Code', monospace;
-          font-size: 12px;
-          transition: all 0.2s;
-        }
-
-        .zoom-button:hover {
-          background: rgba(0, 255, 0, 0.1);
-          box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-        }
-
-        .zoom-button:active {
-          background: rgba(0, 255, 0, 0.2);
-        }
-      `}</style>
-
       <div className="min-h-screen bg-black text-green-400 font-mono px-2 sm:px-4 md:px-6 lg:px-8 py-6 overflow-hidden">
         <div className="mx-auto max-w-screen">
           <div className="p-4 sm:p-6">
@@ -941,10 +542,8 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                           </button>
                         </div>
                         
-                        {/* Current Story Preview */}
                         <div className="flex-1 mx-4">
                           <div className="text-center relative">
-                            {/* Previous Story (blurred) */}
                             {(() => {
                               const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
                               const prevIndex = currentIndex > 0 ? currentIndex - 1 : stories.length - 1;
@@ -956,25 +555,11 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                               );
                             })()}
                             
-                            {/* Current Story */}
                             <div className="text-[0.8rem] sm:text-xs text-green-400 font-bold">
                               {selectedStory.title}
                             </div>
-                            
-                            {/* Next Story (blurred) */}
-                            {(() => {
-                              const currentIndex = stories.findIndex(s => s.id === selectedStory.id);
-                              const nextIndex = currentIndex < stories.length - 1 ? currentIndex + 1 : 0;
-                              const nextStory = stories[nextIndex];
-                              return (
-                                <div className="absolute bottom-0 left-0 w-full opacity-30 blur-sm text-xs text-gray-500 truncate">
-                                  {nextStory.title}
-                                </div>
-                              );
-                            })()}
                           </div>
                         </div>
-                        
                         <button
                           onClick={() => {
                             setSelectedStory(null);
@@ -987,7 +572,6 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                       </div>
                     </div>
 
-                    {/* Story Details - Takes up remaining height */}
                     <div className="border border-green-400 p-4 rounded-border border-glow-green flex-1 overflow-y-auto">
                       <div className="text-sm mb-3 text-yellow-400">◉ STORY ANALYSIS</div>
 
@@ -995,7 +579,7 @@ GLOBAL NEWS DETECTION & BIAS NEUTRALIZATION
                         <div className="text-center py-8">
                           <div className="text-xs mb-2 text-green-400">PROCESSING...</div>
                           <div className="block text-green-400 text-[5px] w-full ">
-                            <pre>
+                            <pre className='text-[5px]'>
 {String.raw`
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
@@ -1015,23 +599,22 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMNNVVV:I:*VVNFNNFI*IIIIIIV**I*IV***IIII*IIII.I**:.::..
 MMMMMMMMMMMMMMMMMMMMMMMMMNNFVI*I:*IFNVVVNVVVI**II**III**I******II*III*.:III:II*IIIIIVVVVVVVVVVVVVVVVVVVVVVVFFFFVVVVVVVVVVIV****I**II***VI*FV**II*FNMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMNFVI*I**INVVVVVVNFII****I*IIIIII***I**I*II*III*FI*IIIIIIVIVVIVVVVVVVVVVFFVVFVVFVFFFVVVVIIVVVVVVVVVVIVI*VIVII*IIIIVVNNI*:***NNMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMNFVI:II*FVV*IIFVIIVNIIII*I*IIIVIVV****IIII:**IIIVVVFVVIIIIVIIVVVVVVVVVVVVVVVVVVFFFFFFFFVVVVVVVVVVVVVVVIIVVVVIFFIFFFFVFN*:*****INNMMMMMMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMMMMMNNF*:II:II*INIINFVIIVII***IIIIIVIVV*****IIV****IV:*IIIIIIIIVVVVVVVVVVVVVVVVVFVFFNFFFFFFFVFVVVIVFVVVVVVVVVIVFVFFFFFFFFFFVNI:*:**IIIVNMMMMMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMMMMNFV:I**IVVNNI*IVNVFIVI**II***I*IIVIVVVI**IIII*I**VIVIIIIIIVVIVIVVVVVVVVVVVFFVVVIVVVIFF*VIVVVFIVFVVVVIVIIIVVVVVFVFFFFFFFVFFFF::*IIIVVVNNMMMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMMMNFI***VIVFFNNNFVNNNNFVVVV*I*I*I*****IVVIVVVF*IVIIIVIVIIIIIIIVVVIVVVVIVVVVVVVVVIIIIIIIVFFFFFVVIII**VII**IVVVIIVVVFFFFVFFFNFFNVI::V*IFIIVVNMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMNNF*:II:II*INIINFVIIVII***IIIIIVIVV*****IIV****IV:*IIIIIIIIVVVVVVVVVVVVVVVVVFVFFNFFFFFFFVFVVVIVFVVVVIVIIIVVVVVFVFFFFFFFVFFFF::*IIIVVVNNMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMNFV:I**IVVNNI*IVNVFIVI**II***I*IIVIVVVI**IIII*I**VIVIIIIIIVVIVIVVVVVVVVVVVFFVVVIVVVIFF*VIVVVFIVFVVVVIVIIIVVVVVFVFFFFFFFVFFNVI::V*IFIIVVNMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMNFI***VIVFFNNNFVNNNNFVVVV*I*I*I*****IVVIVVVF*IVIIIVIVIIIIIIIVVVIVVVVIVVVVVVVVVIIIIIIIVFFFFFVVIII**VII**IVVVIIVVVFFFFVFFFNFFNVI:::*VVVVVIVVNMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMNNV:I*FVVIFNNNNNIINNNNNNNVV*I*II*******III*IIIII*II**FIIIIIIIIIIIVVVV*VVVVVVVVVVVVVI**IV**IIIIIVIIIFIIVIIIIVVIIVVFFFFFFFFNNNNNI:::*VVVVVIVVNMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMNF****V*INNNNNNIIFNNNNNNNNVV*********I************II*V:I*IIIIIIIIIIIVVVVVVVIVVFI**VVVVFVIFVFVIII*VI*V*VIIVVVVVFVVVVVVFVFFFFNNNFI**::**VFVVVFVNNMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMNF**:FVFINNNNNNI*VNNNNNNNNNVIIIF:I***I*III*IIIII*I*****IIII*I*IIIIIIIVIVVIVVVIIVVVIVIIIVIVVFIIIIIVFIVIFVFFFFFFVVFFVVVVVFFFFNNNNII**:::**IVVIFVVNNMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMNF****V*INNNNNNIIFNNNNNNNNVV*********I************II*V:I*IIIIIIIIIIIVVVVVVVIVVFI**VVVVFVIFVFVIII*VI*V*VIIVVVVVFVVVVVVFVFFFFNNNFI**:::**IVVIFVVNNMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMNF**:FVFINNNNNNI*VNNNNNNNNNVIIIF:I***I*III*IIIII*I*****IIII*I*IIIIIIIVIVVIVVVIIVVVIVIIIVIVVFIIIIIVFIVIFVFFFFFFVVFFVVVVVFFFFFNNNVI:*:::***VIVVFIVNNMMMMMMMMMMMMMM
 MMMMMMMMMMMMMNV**IVVVFFNNNNNNFFNNNNNNNNNNVV**NNNN**II*IIIIIIIIIII**I*IIIIFVI*IIIIVIIIVIVIIV**VVIIVVIFVVIVIIVVVIVV*FFFFFFFFFFVVFVVVVVVFFFFFNNNVI:*:::***VIVVFIVNNMMMMMMMMMMMMMM
 MMMMMMMMMMMMNI*IIVFI*VNNNNNFFFNNNNFNNNNNVNVIFNNNN**IIIIIVVIVVV***I*I*I*IIIIIIIIIIII*V*I:*IIVFVVVVVVVIVVIIII*::I*V*VFFFFNNFNNNNFFFFVFFVFFFNFVIVII**::::*I*IVVVVVNNMMMMMMMMMMMMM
 MMMMMMMMMMMNIIIV*I*IINFFFFFFVFVVFFFFFNNIINIVIINNNV***IIVVIVVVII*IV**IIIV*VIIIIIVI**IVV**IVIVVVVVVIVV*:VIIVV:*:*VVFFVFFVFNFNNNNNNFFFFFFVFFFFFIIV***::::::*I**FIVVNNMMMMMMMMMMMM
 MMMMMMMMMMNVI*F***:IVFVFFFFFFVFFNFFVFFIIINNNVIINNI****IVVVVVFIV*IVIIIII*VIVIIIV*:VIIIV*VVVVVIVI**IIVFV**IIFFNNNNNFNNNNFNNNNNNFFNNNNNFFFVVFFVV*:I*:::::::::::VIIVFNMMMMMMMMMMMM
 MMMMMMMMMNFIIF:I:**IVFFFNFFNNNNNNNNNV*I*F*NNIIIINNNVIIIVVVVVFV*III*IIIIVIIIII:**VIV*VVIVVVVVVV*VVFFFFVFFFNNNNNNNNNNNFNVFFVVFFNNNNNNFNFFVVVVVF:*:::::::::::::*I*IVVNMMMMMMMMMMM
 MMMMMMMMNNNFI*:I:**IVVNFVFFNNNNNNNNFIVVIINI:I*VINNNFFIIIVVVIVII*II*II*III:*VI**VVVIIIIVVVVIIIVVFFFFFNNNNNINNNNNNNNNVFVVVIIFVFNNFFVFFNNFVVVVVFFI:::::::::::::**I*IVINMMMMMMMMMM
-MMMMMMMMNNIV*::::**I**FVNNNNNNNNNFIVII*NFNNN*:*VINNNNFVIIVVVVVVVIIIII**IV*IIIIFVI*VII***VIVVVVVFNNNFFVVNNNV*NNNNNNVVIVVVVVIVFNNFIVVFVNNFVVVVFV:::::::::::::***IIIFVFNMMMMMMMMM
-MMMMMMMNNVI:.:*****IVIVVIIIV*IIFNFVIFNNNNNNNNNF*IINNFFFFFIVVVFVVVVVIIIII**IIV*VIIIIII**IVVVIVVIFNFFFIFFIIVVFFNNNNNVVIVVVIVVIFNNNFFVIFNNNFVVVVVV::::::::::::*I**VIFI*NMMMMMMMMM
-MMMMMMMNV**:::::IIIIV*:VI*V:II*VFVIINNNVFFNNNNNN*IFFFFFFIIIIVFVVVFVVVVI*II*I*****IIIVIVIIVVVVVVIVVFIIFVFVVVNFIII**IVVIIVVVVVFNNFVVFVVNNNNFVVVVI.:::*::***VII*IFVIF**FNMMMMMMMM
-MMMMMMNN**::::.:::**IIIIVVII*I*IIII*INNNNNNNNNNN**IFFFFFFFIIIVVVVVIII*II*I**I*II*I**VFVVVVVVIVIFFFVIIVFFVVVNVVII*IVVFVIVVFFVVVFVFVIIIFNNNFVVVVI::*::*V**I****IVIVFI*VNMMMMMMMM
-MMMMMMN*I:*:::.:::*:*I*II*I**I*I::*IIIIVFNNNNNNFI***FFFVVFFVIVVFV:I*I*II*IVI**IIV:I*IVFFVNFFVVFFFVFII*VVFVV*:**I*IVIINFFFNFFFFVVIIVIIVNNNFIIVFI::II*:VF*FIV**FVIFV*IIFNMMMMMMM
+MMMMMMMMNNIV*::::**I**FVNNNNNNNNNFIVII*NFNNN*:*VINNNNFVIIVVVVVVVIIIII**IV*IIIIFVI*VII***VIVVVVVFNNFFFIFFIIVVFFNNNNNVVIVVVIVVIFNNNFFVIFNNNFVVVVFV:::::::::::::***IIIFVFNMMMMMMM
+MMMMMMMNNVI:.:*****IVIVVIIIV*IIFNFVIFNNNNNNNNNF*IINNFFFFFIVVVFVVVVVIIIII**IIV*VIIIIII**IVVVIVVIFNFFFIFFVVVNFIII**IVVIIVVVVVFNNFVVFVVNNNNFVVVVI.:::*::***VII*IFVIF**FNMMMMMMMMM
+MMMMMMMNV**:::::IIIIV*:VI*V:II*VFVIINNNVFFNNNNNN*IFFFFFFIIIIVFVVVFVVVVI*II*I*****IIIVIVIIVVVVVVIVVFIIFVFVVVNVVII*IVVFVIVVFFVVVFVFVIIIFNNNFVVVVI::*::*V**I****IVIVFI*VNMMMMMMMM
+MMMMMMNN**::::.:::**IIIIVVII*I*IIII*INNNNNNNNNNN**IFFFFFFFIIIVVVVVIII*II*I**I*II*I**VFVVVVVVIVIFFFVIIVFFVV*:**I*IVIINFFFNFFFFVVIIVIIVNNNFIIVFI::II*:VF*FIV**FVIFV*IIFNMMMMMMMM
 MMMMMNF***::::::II::I*IIIIIIIIIIIII*I**IVNNNNNFFFFI*IIFFFFFFVVIVVVVVVIIVVII*IIIIIII*VIFNVVFVFVFFVVVIIIIFVIVIVFV*VI*VVVFFFNFFFVVVFVVIIIVVNNNII*I:I*VI*IFI*VIVIVIVFII*IINMMMMMMM
 MMMMMNII*:.*::::::.**:IIVIIIIIIIIII***IIIIFVFNFFFFFF*V*FVVFFVFFVVVFFFVVIIVVVIIIIIIIVVVFNNVVNFVFFIVFVVVFFVVINFFNVII*IVIVFV*VFIVIVIIV**VIVNNNNIIIII*:II*F*VVNIIVVFVI***NNNMMMMMM
 MMMMNNV::I*:::...:::*VIIIIIIVI*VIVVVI***IIIVVFFFFFFFFIFFFFFFFFFFVIVVVIVFFVVIIVIIIIIVVINNNFFNFFFFF:VVN*VVVVFFFNNIII*IIIVIV*II*I*VNFFVIIIIIFVVVI*V**:*IVFFFVVNFVVVVI*IFNFNMMMMMM
@@ -1040,35 +623,34 @@ MMMMNV*:*:*:....:::*IIII*IIVIIIIIIIIIVI:*IIVIVVVFVFFFVVVVFFFFFFFVVVVVVVFFVVVII*I
 MMMMNI::***::*I:::**:*I*V**IVIVIIIVVFFVI:IIVVVVVFFVFFVVVVVFFFFFFFFFFVVFVFVVVVIIIIIIVFFNNNNVVI*VIV*.:*FFIVVFFFFNFFVFIVIIFVVFFV*II*V***II*VIII*V*VIIFVFFVVIFF*I::::I:FFNVNNMMMMM
 MMMMNI::*:::::I**::*VIVVIIIIIIVII*VVFFFFV*IIIVVVVFFFFFFFFFFFFFFFFFFFVVVVVVFI*II*IVVIVFFFNNFVV*:VFI::*FVVVIIVFVFFVVFFFVVFFFFVIV*IV*VIVIVII**VVFVIIIIVVVFIIFFVFVII***NFFIFNMMMMM
 MMMMNV:::*::*::I:::*VII**IVVVVIIVIVVFFFVFVIIIIIVFFFFFFFVVFFFFFFFFFFFFVVV*IIVIIVVIIIIVIIVVVVNIV*IVFFIIIVIFVVVFIVVVVVVVIFFNFVIIIV::F*F**IVVVIIIVIIIIIIVVIIFFVF**VN*IINFINFNMMMMM
-MMMMNV:::*:*::.:II*IIIIVI**IVVVVIIVIIVFFFFFFVVVFFFFFFFFFFFFFFFFFFFFVVVI*VIFVVVVVI**IIV*I**IVVVI:FIIVI*:VIIIIFVVIVIFVVVNNNVIV*V*:IIF*IF:V*I*IFIIIIIVVIII*F*IFNNNNIFFNFVFVNMMMMM
-MMMMNF*::**.::****IIIIIVVV:IIVVVVIIVFFFFFFFFFVVVVIFFFFFFFFFFFFFFFFFFVIVIFIFVVVV*I*IV***IIII**III.IVI:**..VVVIFV**IVIIFFFVNFVII**IIVF*II*V:IV*IIIIIIIIFVVFVFFNFVVNVFFFVFFNMMMMM
+MMMMNV:::*:*::.:II*IIIIVI**IVVVVIIVIIVFFFFFFVVVFFFFFFFFFFFFFFFFFFFFVIVIFIFVVVV*I*IV***IIII**III.IVI:**..VVVIFV**IVIIFFFVNFVII**IIVF*II*V:IV*IIIIIIIIFVVFVFFNFVVNVFFFVFFNMMMMMM
+MMMMNF*::**.::****IIIIIVVV:IIVVVVIIVFFFFFFFFFVVVVIFFFFFFFFFFFFFFFFFFVIVVVVFIVVI*IV*:*IVII**I**II:VI*II:II*IIVFVIIIIVFFNVFNFFVVI:*FVNI:*V**V**VIVVII:VVFFFIFFNVFFFVFVFNNNNMMMMM
 MMMMNFV::::******IIIFVVVIFVVVVVFFFFVFNFFFFFFVIVIFFFFFFFFFFFFFFFFFFFVVVVVVVFIVVI*IV*:*IVII**I**II:VI*II:II*IIVFVIIIIVFFNVFNFFVVI:*FVNI:*V**V**VIVVII:VVFFFIFFNVFFFVFVFNNNNMMMMM
-MMMMNFV*:***II**I*IVII*I*II*IVFFFFIFFNNFFVVFVIFFFFFFFFFFFFFFFFFFFFIVVVVVVIV*FF:II*VVIIVIII*I*I*IIII*****IVVVFFFFNVVVVFVVVVVIFFI*:IF*V:F*:*:V*VFFVI*:IVIIIVF:VIFFFFFNFNNNMMMMMM
+MMMMNFV*:***II**I*IVII*I*II*IVFFFFIFFNNFFVVFVIFFFFFFFFFFFFFFFFFFFFIVVVVVVIV*FF:II*VVIIVIII*I*I*IIII*****IVVVFFFFNVVVVFVVVVVIFFI*:IF*V:F*:*V*VFFVI*:IVIIIVF:VIFFFFFNFNNNMMMMMMM
 MMMMMNIVIV*III*I***:IF**IIIVIIVVFFFFNFFFV*IVVVFFFFFFFFFFFFFFFFVIIVFVVVVVVVIVVVI**VVFFVIIII*V****IIIIII*I*IIII*IFIFFVIF*VVF*VFFV**IIIIFFI*FVII*VIFIVVI*IIIV*FVIIINFFVFFFNMMMMMM
 MMMMMNFVIVVI*I*I.:*:*IIIIII*IIIVFVFVFFII*IIIIIVVVVFFFFFFVFFFFFVIVFVVVVVIVVVVVVVI*II**IIIFVVVVV**I*IIIIIIVIV*::FNNVIVII**VVFI*VVIVFVVIVFFIFF*I:I*F**IIVVVV*FVFFVFFVFNFVFNMMMMMM
-MMMMMNNI:VIIVVII**::**IIII*IIII*IFVVVIVVIIIIIIIIIVVIFFFVVFFFFFFFFFFVVVVIIIVIIVVVVI**V*III*I*IVIF*IVFFFFVIFNFFNFFFNNIIVFI**:V*VFF:IV*I**III*::I:***I*:VI***IIVFNVVVIIFVNMMMMMMM
+MMMMMNNI:VIIVVII**::**IIII*V**IIIIVFFFVVVIIIIIIIIIVVIFFFVVFFFFFFFFFFVVVVIIIVIIVVVVI**V*III*I*IVIF*IVFFFFVIFNFFNFFFNNIIVFI**:V*VFF:IV*I**III*::I:***I*:VI***IIVFNVVVIIFVNMMMMMM
 MMMMMMNIVIIIII**::.:.**VVII*V**IIIIVFFFVVVIIIIIIIVVVVFFFFFFFFFFFFVVVVVVIIIIVIIVI:*V::**I::I*II**F*I*VNIVVFFVNNNFFFFI*I***V*.:.*::**:I:IF*VV::VIVI:VIVVVFVFIIFIFN*VIVIVNMMMMMMM
 MMMMMMNFVVVVI*:I::.:::IIVV::::*II*IFFFFFVFVIIIIIIIVVVFFFFFFFFFFFFFFVIIIIVIIIIV*:I*IVIV::**V*III:VVFVNIFFFFFFFNFNNFFVFVV:I.*.::::*I*:IVIF:**V*I*V**IIIIVVVIFFVNNIIV*NVNMMMMMMMM
 MMMMMMMNVVFFVI*:*....:::::.::*II*****IIIIVVVVIVIVIIFFFVFFFFFFFFFFV*IVVVVVVVIII**I:I***V*VFFVIVVFVVV*FFFFFFFFFFFNV*IIIFF**I::F*F*I*VIIFIFFV**I:::*I*IIVIVIVFNFNFVFVVVFNMMMMMMMM
 MMMMMMMNNVVVVV*:*I:..:....:***FF*V*IFIVVFIVFFVVIVFVIVVFFFFFVFFIVVFFVVVVI*IIIII:*:.:IIVFFFFFFVIVFFNIVFFVFFFFFFFFFFFFIVFFFFVFFFFFVFFFFVIIVII*:.::**VIVV*VFVFFFIIIFFVVVNMMMMMMMMM
 MMMMMMMMNFVV**:*VI*:.......*:::II*I*VVFFFVIVVVIIVVVFFFFFFFFFFFVIVVFFFFVFVVVIVI*:*I:*IIVFFIVFFFFFVVFFVII*FFFIVFFFFFNNFNFNNNNVFFFFVFFFFVV*I**:::IFV:IVVIVIVFVIIIVFVVVNNMMMMMMMMM
-MMMMMMMMMNFI*IV*IV*............:IIVIFVIFI*FVFNVFNNFNFFFVVFFVVFFFVVVVVVI*I***:*:***IFFFIFFVFFFFFVIFFFFVVFFFFFFFFFFFFFFFNNNFNNNNNNNFFVFFFF**.I*VII*IFVVFVVVVV*FII*VVFNMMMMMMMMMM
+MMMMMMMMMNFI*IV*IV*............:IIVIFVIFI*FVFNVFNNFNFFFVVFFVVFFFVVVVVVI*I***:*:***IFFFIFFVFFFFFVIFFFFVVFFFFFFFFFFFFFFFNNNFNNNNNNNFFVFV*::.I:*VV:VIVFIVIFIIV***VVFNMMMMMMMMMMMM
 MMMMMMMMMMNVI:IIFI**:...:..:.*.I*IFVFFFFII*VIFVVFVFFFFIVVVIFVIVVVVVVII*III*::*IIIIIFIFFVVFFFFFFFFFFFFFFFFFFFFFVFFFFFNNNN*VNNNNNNNNFFVFV*::.I:*VV:VIVFIVIFIIV***VVFNMMMMMMMMMMM
-MMMMMMMMMMNNVIIV:VII*:....::.::*....::VVVFFFFIV*I*IFIV*:*IIIVIIFVVIV:**:.:.IVIIVVVVIVFFFFFFFFFFFFFFFFFFFFFFFFVFFFFFFFFFFFFFFFNFNNNNFF::::.:*VI.VFFIV:*I**III*:IVFNMMMMMMMMMMMM
-MMMMMMMMMMMNNF:II*II.*:...........*VV:IFIVFFNNIFIFIIII*IIIVIV*II*:*:..::IIIIVIVFVVFFIFFFFFFFFFFFFFFFFFFFFFFVFFFFFFFFFFFVVFVFFFFFFFFNV*I*V:::*::*F*VVI*I*I**IIIVVNMMMMMMMMMMMMM
-MMMMMMMMMMMMNNIFFVFF***...........:*VII:*VVFFFVVIFVVVFFFFFVFV**I:*:**IIIVFVFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFVFIFFFFFFVIVIIIIVVFFFFFFFNNNFVFFVI*:**:IFFF*IV**VVIIVVNMMMMMMMMMMMMMM
-MMMMMMMMMMMMMNNIIIIIVF*::.*V::........*VIII*VFVFFFFFFFFVVFVV*:IIIVIVIVIFFVVFVVIIVFFFFFFFFFFFFFFFFFFFFFFVVFFFFFFFFFFVVIIVIFVIIVVFFFNNNFNFN:NIVFV:IVFVF*I**V*IVVNMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMNNIVVFVFNIV:I**..*..*:......*V*VF*:....:IVVV::*V:*IVVVVFFVIVFVV*IVVVVVFFFFFFFFFFFFFFF*VFFVIFFFFFFFVVI*IVIFFIFFVVFFFNNNVINNFFIIFFNNIFIV**II**VVVNMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMNFIVVV**VVIVNVI*VVV*::*.II:**......*FF**IIV*:IVIFFVIVV**IVVVVVVVIIIIVFFFFFFFFFFFFFFIIFVFFFFFFFFFI*III*::IVFFFFFVNFV:..FIF*NFNNFFFFFVI**:*FVFNMMMMMMMMMMMMMMMMM
+MMMMMMMMMMNNVIIV:VII*:....::.::*....::VVVFFFFIV*I*IFIV*:*IIIVIIFVVIV:**:.:.IVIIVVVVIVFFFFFFFFFFFFFFFFFFFFFFVFFFFFFFFFFFVVFVFFFFFFFFNV*I*V:::*::*F*VVI*I*I**IIIVVNMMMMMMMMMMMMM
+MMMMMMMMMMMNNF:II*II.*:...........*VV:IFIVFFNNIFIFIIII*IIIVIV*II*:*:..::IIIIVIVFVVFFIFFFFFFFFFFFFFFFFFFFFFFVFFFFFFFFFFVVIIVIFVIIVVFFFNNNFVFFVI*:**:IFFF*IV**VVIIVVNMMMMMMMMMMM
+MMMMMMMMMMMMNNIFFVFF***...........:*VII:*VVFFFVVIFVVVFFFFFVFV**I:*:**IIIVFVFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFVFIFFFFFFVIVIIIIVVFFFFFFFNNNFNFN:NIVFV:IVFVF*I**V*IVVNMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMNNIIIIIVF*::.*V::........*VIII*VFVFFFFFFFFVVFVV*:IIIVIVIVIFFVVFVVIIVFFFFFFFFFFFFFFFFFFFFFFVVFFFFFFFFFFVVIIVIFVIIVVFFFNNNFNFNFFIIFFNNIFIV**II**VVVNMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMNNIVVFVFNIV:I**..*..*:......*V*VF*:....:IVVV::*V:*IVVVVFFVIVFVV*IVVVVVFFFFFFFFFFFFFFF*VFFVIFFFFFFFVVI*IVIFFIFFVVFFFNNNVINNFFIIFFNNFFFFFVI**:*FVFNMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMNFIVVV**VVIVNVI*VVV*::*.II:**......*FF**IIV*:IVIFFVIVV**IVVVVVVVIIIIVFFFFFFFFFFFFFFIIFVFFFFFFFFFI*III*::IVFFFFFVNFV:..FIF*NFNNFFFFFVI****V*VFNMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMNFVIFVFNFFVVVVVIINNVV:.:*:.*.....::....I*::*IVIII:*FVVIIVVVVVII*VIVVIVFVVIVI*VIFVFFFFFIFFFFVFVI**:*::::VVV*FVFII:.::*NIVVNNFNFFVII****V*VFNMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMNNFVF*IVI*FVFVFNNVV**I:.:VFVFIVFVF*F:..I:VIIVFVVV*....::*VVVIVVIIVIVIIVVI*:...*I:II:I.FFVVFFF*F**:.*:**:*:*..VIII*VFFFVNNNFVV*IIFF***IVNNMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMNFVFII*VVNIVFI::*:*FFIFV:..:..INIFF*I::I:***IIII**F:I:**::::::I*:IV:....*:*FVFFFFFFVIVIFFV*:::**::....IV*IVIIIIFIFFFNNFVVI*:*F*IIIVFNMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMNNFFFFVFNNIFFIFIIFFFFVIV*:*:*:IFNV*::VIVFI*VVVVFVI*VIVIFII***IIIVVFFVFFFFFFFV*FV:FIIFVVFVI**.::VVIIIVVIVI*I*IVFNFNNIVFVI::IF***FVNNMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMNFFFNNVFVVVFV**VI*VFFFIVI:*I**FFFV*VFV:*:IV:I.IIVVVVII::**::*:I**FFFFVFFIIIIVFVII**III:.:..*VIVVIIIVI*IIIF*VVNNFFVV*I:*IV**IVFNMMMMMMMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMMMMMMMMMMNFFNN*NFVFNFFFIVV**IFI*NNV*I::::FIV*VIVV:*..::II*.I*:*II.IIII***IVI*:.*:..:IVII**V::*VI*.:VIVVVII:*IIIVIIFIII*V**:*V*VIIVFNMMMMMMMMMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMMMMMMMMMMMNNFFNFFII*VVFVV*VVIIFFVN*VIIIVI.:...:I*:*::..::*:..:.:.**:::*::I::II::::*:I*IV**II**I*.*FI*IV*::*II*INF**VVI*:.:*I***IFNMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFFV*FV::*VV*VIFFFV**NN*V**III:*:**:::......:II*..I:***I:*:*..:**I:*I:.:*I**:*FV*I*II**V*IVVVV*IVI*IIF**IF:*I****VNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
-MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNFIF*FIVIVVF*VFFNNFIIVIN**::**INVI*I*...::*:*:**V*::::::*I:::**:FFVVVFFII:::FI:**III*F*V*FVII*VIIIVV**I:***FNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMNFFNN*NFVFNFFFIVV**IFI*NNV*I::::FIV*VIVV:*..::II*.I*:*II.IIII***IVI*:.*:..:IVII**V::*VI*.:VIVVVII:*II*INF**VVI*:.:*I***IFNMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMNNFFNFFII*VVFVV*VVIIFFVN*VIIIVI.:...:I*:*::..::*:..:.:.**:::*::I::II::::*:I*IV**II**I*.*FI*IV*::*II*IIF**IF:*I****VNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFFV*FV::*VV*VIFFFV**NN*V**III:*:**:::......:II*..I:***I:*:*..:**I:*I:.:*I**:*FV*I*II**V*IVVVV*IVI*IIF**IF:*I****FNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFIFFFFVVVVVVVFFNFV*NNNVFFNVVIVNVVF:I*IF::*:.:**IV*:::*I*V**:I**::IV::II:FI***I*V*V*III*FFIIV*IV**III***NNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNVI*FVVVVVVVFFFFNNNFVVFIIVVIIII**I**:*IV*:.:*VF*I*IIVVVIVFF*VIFIVVVIFIVFVIIFFVIVIFF*VVVV*NNFI*FIVVVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNFVVVVVVVVVFFI*FFNFV:VIVFNIFVFFVI*VIVVIIIFIVFVIVI******IFFVFFFVNNNFNFFFNV::**:VIF*VVFIIFV*IFFVNNMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
@@ -1184,7 +766,6 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-10 p-3 text-xs sm:text-sm gap-6">
-              {/* Left Column: SYSTEM Info */}
               <div className="flex flex-col gap-2 text-green-400">
                 <div className="flex items-center gap-2">
                   <span className="inline-block w-2 h-2 bg-green-400 pulse"></span>
@@ -1200,7 +781,6 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
                 </div>
               </div>
 
-              {/* Right Grid: Stats */}
               <div className="flex justify-around flex-1 w-full text-sm sm:text-md">
                 <div className="text-center p-3">
                   <div className="text-2xl font-bold text-green-400">{globalStats.totalSources}</div>

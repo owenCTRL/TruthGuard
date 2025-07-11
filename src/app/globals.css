@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -23,4 +24,95 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  font-family: 'Fira Code', monospace;
+  background: #000;
+  color: #00ff00;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #001100;
+  border: 1px solid #003300;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 226, 119, 1);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
+
+.terminal-font {
+  font-family: 'Fira Code', monospace;
+  font-weight: 400;
+}
+
+.rounded-border {
+  border-radius: 4px;
+}
+
+.border-glow-green {
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.1), inset 0 0 10px rgba(0, 255, 0, 0.02);
+}
+
+.border-glow-yellow {
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.1), inset 0 0 10px rgba(255, 255, 0, 0.02);
+}
+
+.border-glow-red {
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.1), inset 0 0 10px rgba(255, 0, 0, 0.02);
+}
+
+.story-card-hover {
+  background: rgba(0, 255, 0, 0.03);
+  border-color: rgba(0, 255, 0, 0.8);
+}
+
+.story-card-selected {
+  background: rgba(255, 255, 0, 0.05);
+  border-color: rgba(255, 255, 0, 0.8);
+}
+
+.zoom-button {
+  background: transparent;
+  border: 1px solid rgba(0, 226, 119, 1);
+  color: rgba(0, 226, 119, 1);
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.zoom-button:hover {
+  background: rgba(0, 255, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.zoom-button:active {
+  background: rgba(0, 255, 0, 0.2);
 }
