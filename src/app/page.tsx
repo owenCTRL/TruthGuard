@@ -1,30 +1,12 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import { Analytics } from "@vercel/analytics/next";
 import { ASCIIGlobe } from './components/asciiGlobe'; // Adjust the path based on your file structure
+import { sampleStories } from '../../test/sampleStories';
+import { Story } from './components/Stories';
 import './globals.css';
 
 // Story type definition
-interface Story {
-  id: string;
-  title: string;
-  category: 'US' | 'WORLD' | 'POLITICS' | 'BUSINESS' | 'HEALTH' | 'ENTERTAINMENT' | 'ECONOMICS' | 'CYBER' | 'ENERGY' | 'DEFENSE';
-  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
-  location: { lat: number; lng: number; name: string; country: string };
-  reliability: number;
-  bias: number;
-  impact: number;
-  sources: number;
-  timestamp: Date;
-  summary: string;
-  keyPlayers: string[];
-  sentiment: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL';
-  connections?: string[];
-  truthScore?: number;
-  abstractedContent?: string;
-  biasedClaims?: string[];
-  verifiedFacts?: string[];
-}
 
 const ModernProgressBar = ({ value, max = 100, width = 20, showPercentage = true }: { value: number; max?: number; width?: number; showPercentage?: boolean }) => {
   const filled = Math.round((value / max) * width);
@@ -56,108 +38,14 @@ export default function TruthGuardASCII() {
   const globeRef = useRef<ASCIIGlobe | null>(null);
   const animationRef = useRef<number | undefined>(undefined);
 
-  const sampleStories: Story[] = [
-    {
-      id: '1',
-      title: 'NATO Eastern European Military Movement Reports',
-      category: 'DEFENSE',
-      severity: 'CRITICAL',
-      location: { lat: 52.23, lng: 21.01, name: 'Warsaw', country: 'Poland' },
-      reliability: 74,
-      bias: 32,
-      impact: 89,
-      sources: 147,
-      timestamp: new Date(),
-      summary: 'Multiple sources report military movements. Truth analysis indicates 68% factual content with significant bias from all sides.',
-      keyPlayers: ['NATO', 'Pentagon', 'Polish MoD'],
-      sentiment: 'NEGATIVE',
-      connections: ['2', '3'],
-      truthScore: 68,
-      abstractedContent: 'Military alliance conducting routine exercises in member state territory. Scale and timing subject to interpretation bias.',
-      biasedClaims: ['Unprecedented military buildup', 'Aggressive posturing', 'Defensive response only'],
-      verifiedFacts: ['Military exercises scheduled', 'Standard NATO protocols followed', '3,000 personnel involved'],
-    },
-    {
-      id: '2',
-      title: 'Global Semiconductor Supply Chain Analysis',
-      category: 'ECONOMICS',
-      severity: 'HIGH',
-      location: { lat: 25.03, lng: 121.56, name: 'Taipei', country: 'Taiwan' },
-      reliability: 81,
-      bias: 18,
-      impact: 76,
-      sources: 238,
-      timestamp: new Date(),
-      summary: 'Conflicting reports on chip shortage severity. Mean analysis suggests 15-25% capacity impact, not 40% as claimed.',
-      keyPlayers: ['TSMC', 'Samsung', 'Intel'],
-      sentiment: 'NEGATIVE',
-      connections: ['1', '3'],
-      truthScore: 81,
-      abstractedContent: 'Semiconductor production experiencing moderate constraints. Market speculation amplifying actual impact metrics.',
-      biasedClaims: ['Industry collapse imminent', 'No shortage exists', '40% production drop'],
-      verifiedFacts: ['15-25% capacity reduction', 'Supply chain delays averaging 3 weeks', 'Automotive sector most affected'],
-    },
-    {
-      id: '3',
-      title: 'Financial Infrastructure Security Event',
-      category: 'CYBER',
-      severity: 'CRITICAL',
-      location: { lat: 38.89, lng: -77.03, name: 'Washington DC', country: 'USA' },
-      reliability: 58,
-      bias: 45,
-      impact: 92,
-      sources: 89,
-      timestamp: new Date(),
-      summary: 'Unverified claims of coordinated attacks. Truth index low due to conflicting technical details across sources.',
-      keyPlayers: ['FBI', 'CISA', 'Banks'],
-      sentiment: 'NEGATIVE',
-      connections: ['1', '2', '4'],
-      truthScore: 58,
-      abstractedContent: 'Security incident reported at financial institutions. Technical specifics unconfirmed. Standard protocols activated.',
-      biasedClaims: ['State-sponsored attack', 'System completely compromised', 'Minor glitch only'],
-      verifiedFacts: ['Security protocols activated', 'No confirmed data breach', 'Investigation ongoing'],
-    },
-    {
-      id: '4',
-      title: 'European Energy Infrastructure Investment',
-      category: 'ENERGY',
-      severity: 'MEDIUM',
-      location: { lat: 51.50, lng: -0.12, name: 'London', country: 'UK' },
-      reliability: 85,
-      bias: 22,
-      impact: 68,
-      sources: 131,
-      timestamp: new Date(),
-      summary: 'Investment figures vary by €200B across sources. Averaged analysis indicates €350B most likely figure.',
-      keyPlayers: ['EU Commission', 'UK Gov'],
-      sentiment: 'POSITIVE',
-      connections: ['3'],
-      truthScore: 85,
-      abstractedContent: 'Major renewable energy investment announced. Actual commitment level between €300-400B based on source reconciliation.',
-      biasedClaims: ['€500B guaranteed', 'Mere political gesture', 'Immediate implementation'],
-      verifiedFacts: ['€350B median commitment', '5-year rollout plan', '12 member states participating'],
-    },
-    {
-      id: '5',
-      title: 'Pacific Trade Route Disruption Claims',
-      category: 'ECONOMICS',
-      severity: 'HIGH',
-      location: { lat: 35.67, lng: 139.65, name: 'Tokyo', country: 'Japan' },
-      reliability: 72,
-      bias: 28,
-      impact: 83,
-      sources: 156,
-      timestamp: new Date(),
-      summary: 'Shipping delays reported with varying severity. Analysis shows 20% impact, not 60% as some sources claim.',
-      keyPlayers: ['Shipping Corps', 'Port Authorities'],
-      sentiment: 'NEGATIVE',
-      connections: ['2'],
-      truthScore: 72,
-      abstractedContent: 'Moderate shipping delays affecting Pacific routes. Weather and port congestion primary factors.',
-      biasedClaims: ['Complete route closure', '60% capacity loss', 'No significant impact'],
-      verifiedFacts: ['20% delay increase', '2-3 day average delays', 'Alternative routes available'],
-    },
-  ];
+  const addTerminalLine = useCallback((line: string) => {
+    setTerminalOutput(prev => [...prev, line]);
+    setTimeout(() => {
+      if (terminalRef.current) {
+        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+      }
+    }, 0);
+  }, []);
 
   useEffect(() => {
     setStories(sampleStories);
@@ -177,7 +65,7 @@ export default function TruthGuardASCII() {
     addTerminalLine(`├─ Monitoring ${stats.totalSources} sources`);
     addTerminalLine(`├─ Global truth index average: ${stats.avgTruthScore}%`);
     addTerminalLine(`└─ System ready`);
-  }, []);
+  }, [addTerminalLine]);
 
   useEffect(() => {
     const animate = () => {
@@ -230,15 +118,6 @@ export default function TruthGuardASCII() {
       globeRef.current.setZoom(newZoom);
       setGlobeZoom(newZoom);
     }
-  };
-
-  const addTerminalLine = (line: string) => {
-    setTerminalOutput(prev => [...prev, line]);
-    setTimeout(() => {
-      if (terminalRef.current) {
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-      }
-    }, 0);
   };
 
   const clearTerminal = () => {
