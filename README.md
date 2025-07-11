@@ -7,12 +7,9 @@
 ![Issues][issues-shield]
 
 <br />
-<p align="center">
-  <img src="public/assets/truthguard.png" alt="TruthGuard Logo" width="100" />
-</p>
 <h3 align="center">TruthGuard</h3>
 <p align="center">
-  <strong>Built by Clickroot</strong><br />
+  <strong>by Clickroot</strong><br />
   <em>Mission-Critical, By Design.</em>
   <br /><br />
   <code>TruthGuard is the signal filter for the post-truth era.</code>
